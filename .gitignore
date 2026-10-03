@@ -12,3 +12,4 @@ work/generated/*
 !output/final/.gitkeep
 !work/temp/.gitkeep
 !work/generated/.gitkeep
+!work/generated/video_requests.md
