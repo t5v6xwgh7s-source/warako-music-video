@@ -13,3 +13,6 @@ work/generated/*
 !work/temp/.gitkeep
 !work/generated/.gitkeep
 !work/generated/video_requests.md
+
+# Python cache
+__pycache__/
