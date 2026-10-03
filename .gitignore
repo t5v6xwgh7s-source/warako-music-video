@@ -1,0 +1,14 @@
+# Large media / generated files
+assets/audio/*
+assets/video/*
+output/*
+work/temp/*
+work/generated/*
+
+# Keep directories
+!assets/audio/.gitkeep
+!assets/video/.gitkeep
+!output/preview/.gitkeep
+!output/final/.gitkeep
+!work/temp/.gitkeep
+!work/generated/.gitkeep
