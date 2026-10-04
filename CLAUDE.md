@@ -105,6 +105,12 @@ QRコード
 - `baseline_v3b`: 最終確認の基準版(凍結)。`v3c_r3b`: 比較履歴(再カット版)。**`v3d_r3_continuous`: 現時点の採用候補**(`output/final/candidate_v3d_r3_continuous/`)。一覧は `work/storyboard/versions.md`。
 - 制作の標準ワークフロー(違和感 → 局所修正 → variant → 差分検査)と汎用ツールは `music-video-maker` Skill にある。この作品の固定地点・variant登録・歌唱位置はこのリポジトリの `scripts/` と `work/storyboard/` にある。
 
+## YouTube公開(youtube-publisher Skill)
+
+- 「これをYouTubeに出す」で、公開候補の特定・検査・タイトル/概要欄/サムネ候補・投稿パッケージ(`work/youtube/<id>/package.json`)・アップロードカードまでAIが準備する。**公開は人間だけ**(AIはpublic化・削除・コメント返信・既存動画の変更をしない)。
+- チャンネル共通の既定値は `work/youtube/channel.json`。秘密情報はGit・チャットに置かない(`.gitignore` に追加済み)。
+- APIアップロード(Phase 2)は、未監査APIプロジェクトのprivateロックが解消され、「非公開アップロード後に人間がStudioで公開できる」ことを確認できるまで、本番運用しない。
+
 ## 基本方針
 
 完成物を作ることを優先する。

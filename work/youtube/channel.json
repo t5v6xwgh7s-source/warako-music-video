@@ -1,0 +1,9 @@
+{
+ "channel": "わらこ39⭐︎STAR’s",
+ "credit_line": "Trinity of Spirits 115 / わらこ39⭐︎STAR’s",
+ "language": "ja",
+ "category_id": "10",
+ "title_format": "{title}｜Music Video",
+ "font": "assets/fonts/ZenMaruGothic-Medium.ttf",
+ "notes": "チャンネル共通の既定値。作品ごとの内容は work/youtube/<id>/package.json に置く。Skillには作品固有の語を入れない。"
+}

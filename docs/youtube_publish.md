@@ -1,42 +1,13 @@
-# YouTube 公開メモ(v3d 採用)
+# YouTube 公開メモ(第1号: 虹の向こうで会いたい)
 
-状態: **公開前**(公開したら下の「公開後」を埋める)
+**この文書に、タイトル・概要欄などの内容は書かない**(二重管理を避ける)。唯一の情報源は
+`work/youtube/niji-no-mukou-de-aitai/package.json`。人間向けのコピペカードは同じフォルダの `STUDIO_UPLOAD_CARD.md`(自動生成)。
 
-## 方針
-- 本編として公開する版: `v3d_r3_continuous`(`work/storyboard/versions.md`)。
-- 説明しすぎない。MV自体が「虹 → 記憶 → 再会 → おかえり」で語っているので、タイトルと概要欄は作品の邪魔をしない。
-- 今回やらないこと: Instagram / TikTok / Shorts への本格展開、宣伝。まず「本編が存在する場所」を作る。
-- MV最後のQR(宇宙酒場への入口)は概要欄で説明しない。見つけた人だけ辿れるようにする。
+- 公開に使う版: `candidate_v3d_r3_continuous`(`work/storyboard/versions.md`)
+- サムネ候補: `work/youtube/niji-no-mukou-de-aitai/thumbnails/`(3案。選ぶのは人間)
+- 方針: 宣伝しない / Shorts・Reels・TikTok は導線が整ってから / QRは概要欄で説明しない
+- 手順と責任分界: `.claude/skills/youtube-publisher/SKILL.md`(Phase 1: 人間がStudioでアップロードして公開)
+- APIでの非公開アップロード(Phase 2): `.claude/skills/youtube-publisher/reference/phase2_uploader.md`(条件が整うまで使わない)
+- 連携の調査: `docs/youtube_integration_plan.md`
 
-## タイトル
-虹の向こうで会いたい｜Music Video
-
-## 概要欄(公開文)
-「またね」って言った、その先で。
-
-離れていても、
-季節がいくつ過ぎても、
-心のどこかに残っている人がいる。
-
-虹の向こうで、
-もう一度会えたなら。
-
-『虹の向こうで会いたい』
-Music Video
-
-Trinity of Spirits 115 / わらこ39⭐︎STAR’s
-
-## サムネイル(未作成・要検討)
-- 構図: 大きな虹 + 少女とうさぎ。文字は「虹の向こうで会いたい」だけ。
-- 親分は出さない(MVを最後まで見た人が親分に辿り着く構造を守る)。
-- 注意: 既存の絵には「大きな虹 + 少女 + うさぎ」が一枚で揃っているものがない(虹が描かれているのは虹の橋の絵だけで、少女はいない)。新規の絵が要るか、既存の絵を使った構成にするかは、サムネを作る時に決める。
-
-## 公開に使う動画ファイル
-- 高画質の元ファイル: `output/final/candidate_v3d_r3_continuous/candidate_v3d_r3_continuous_full.mp4`(1080p, 63MB, 3:17。曲は3:04で終わり、その後にQRカード)
-- この環境から送れる上限(30MB)に収めた1080p版: `youtube_upload_1080p`(約29MB)。YouTubeは再エンコードするので、公開用としては問題ない範囲。
-- `output/` はGit管理外・このコンテナは使い捨て。**公開に使うファイルは手元に保存すること。**
-
-## 公開後(記入)
-- 公開URL: 
-- 公開日時: 
-- 次: 司令塔(活動一覧)へ「YouTube MV公開済み」を登録 → 「YouTube → 宇宙酒場 → その先」の導線を整える → それが整ってから Shorts / Reels / TikTok。
+公開したら、URLをClaudeへ渡す。記録は `yt_package.py record` が行う(公開URL・日時は package.json と `work/youtube/index.json` に入る)。

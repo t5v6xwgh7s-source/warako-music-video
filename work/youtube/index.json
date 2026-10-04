@@ -1,0 +1,20 @@
+{
+ "schema": "warako.youtube-index/1",
+ "generated": "2026-10-04 02:36:44 +0000",
+ "items": [
+  {
+   "id": "niji-no-mukou-de-aitai",
+   "work": {
+    "title": "虹の向こうで会いたい",
+    "kind": "music-video"
+   },
+   "title": "虹の向こうで会いたい｜Music Video",
+   "source_version": "candidate_v3d_r3_continuous",
+   "state": "prepared",
+   "url": null,
+   "video_id": null,
+   "published_at": null,
+   "package": "work/youtube/niji-no-mukou-de-aitai/package.json"
+  }
+ ]
+}

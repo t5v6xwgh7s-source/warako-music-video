@@ -1,0 +1,85 @@
+{
+ "schema": "warako.youtube-package/1",
+ "id": "niji-no-mukou-de-aitai",
+ "work": {
+  "title": "虹の向こうで会いたい",
+  "kind": "music-video"
+ },
+ "source": {
+  "version": "candidate_v3d_r3_continuous",
+  "manifest": "work/storyboard/baselines/candidate_v3d_r3_continuous.json",
+  "video": "output/final/candidate_v3d_r3_continuous/candidate_v3d_r3_continuous_full.mp4",
+  "sha256": "697cd2b6a854c386a937339d4dcc0cf36504fed66bdc30637d3eff6d4992cfa5",
+  "audio": "assets/audio/song.m4a",
+  "extra_tail_seconds": 13.0,
+  "qr_image": "assets/qr/qr.png",
+  "qr_window_note": "QR card after the song"
+ },
+ "upload_video": {
+  "path": "output/final/candidate_v3d_r3_continuous/candidate_v3d_r3_continuous_full.mp4",
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "pix_fmt": "yuv420p",
+  "fps": "30/1",
+  "duration": 197.17,
+  "bytes": 62920041,
+  "sha256": "697cd2b6a854c386a937339d4dcc0cf36504fed66bdc30637d3eff6d4992cfa5"
+ },
+ "thumbnail": {
+  "selected": null,
+  "candidates": [
+   "work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_a_rainbow.jpg",
+   "work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_b_rainbow_rabbit.jpg",
+   "work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_c_girl_rabbit.jpg"
+  ],
+  "text": "虹の向こうで会いたい"
+ },
+ "title": "虹の向こうで会いたい｜Music Video",
+ "description": "「またね」って言った、その先で。\n\n離れていても、\n季節がいくつ過ぎても、\n心のどこかに残っている人がいる。\n\n虹の向こうで、\nもう一度会えたなら。\n\n『虹の向こうで会いたい』\nMusic Video\n\nTrinity of Spirits 115 / わらこ39⭐︎STAR’s",
+ "tags": [],
+ "language": "ja",
+ "category_id": "10",
+ "visibility": "private_until_human_publishes",
+ "validation": {
+  "checked_at": "2026-10-04 02:38:07 +0000",
+  "technical": [
+   "[PASS] full decode without errors",
+   "[PASS] size 1920x1080 (expected 1920x1080)",
+   "[PASS] h264 yuv420p 30/1",
+   "[PASS] audio stream aac",
+   "[PASS] durations video 197.17s audio 197.16s expected 197.16s (song 184.16s + tail 13.0s)",
+   "[PASS] audio present at the end of the song",
+   "[PASS] no black-screen accidents",
+   "[PASS] QR payload 'https://ichingeki.warako39stars.com/oyabun_readable.html' readable in 13/13 sampled seconds; span 13s (needs >= 10s)",
+   "RESULT: OK"
+  ],
+  "blocking": [],
+  "warnings": [
+   "no tags (optional)",
+   "no thumbnail selected yet (human choice)"
+  ],
+  "ok": true
+ },
+ "status": {
+  "state": "prepared",
+  "history": [
+   {
+    "at": "2026-10-04 02:36:14 +0000",
+    "state": "draft",
+    "note": "created"
+   },
+   {
+    "at": "2026-10-04 02:36:44 +0000",
+    "state": "prepared",
+    "note": "validation OK"
+   }
+  ]
+ },
+ "youtube": {
+  "video_id": null,
+  "url": null,
+  "published_at": null,
+  "upload_method": null
+ }
+}
