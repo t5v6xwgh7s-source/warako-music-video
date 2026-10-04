@@ -17,3 +17,7 @@ work/generated/*
 
 # Python cache
 __pycache__/
+
+# Source artwork extracted from the picture-book HTML (preview material; keep local, not in Git)
+assets/images/*
+!assets/images/.gitkeep
