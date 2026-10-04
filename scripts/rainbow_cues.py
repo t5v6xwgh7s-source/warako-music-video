@@ -28,6 +28,9 @@ CUES = [  # cue, row, expected tag(s), role
     ("R7", nth("虹の向こうで", 3), ("R7",), "虹を終わらせる。虹 → 虹色の光 → 暖かな光 → 宇宙酒場"),
 ]
 
+if any(c.get("tag") == "R3b" for c in cuts):      # variant v3c_r3b: second "虹の向こうで" of the first chorus (0:52.32)
+    CUES.insert(3, ("R3b", nth("虹の向こうで", 1), ("R3b",), "虹へ向かう(R3とは別の構図) → 次の p014 で一歩踏み出す"))
+
 def cut_at(t):
     return next((c for c in cuts if c["t0"] <= t < c["t1"]), cuts[-1])
 
@@ -63,6 +66,7 @@ for cue, r, tags, role in CUES:
     ok_all &= ok
     checks.append((cue, r, states, margin, ok, role))
 
+# R3b (variant only): second "虹の向こうで" of the first chorus
 # extra R7 'また' and R3 second pair (for the reader)
 mata = nth("また", 0)
 r3b = nth("虹の向こうで", 1)
@@ -86,6 +90,7 @@ for cue, r, states, margin, ok, role in checks:
 out += ["", "余裕が±0.3秒より小さいキューは、歌唱位置の推定誤差で外れる可能性がある。R2/R4 は0.4〜0.5秒早めに虹へCUTして吸収している。", "",
         "## 最終着地", "",
         "- 「またねじゃなくて」「おかえりって」: 親分(空いた席→親分アップ)。文字・タイトル・台詞・虹なし。カメラはほぼ静止(1.5%以内のゆっくりした寄りのみ)。"]
-open(os.path.join(ROOT, "work/storyboard/rainbow_cues.md"), "w", encoding="utf8").write("\n".join(out) + "\n")
+os.makedirs(bm.variant_dir(), exist_ok=True)
+open(os.path.join(bm.variant_dir(), "rainbow_cues.md"), "w", encoding="utf8").write("\n".join(out) + "\n")
 print("\n".join(out))
 raise SystemExit(0 if ok_all else 1)

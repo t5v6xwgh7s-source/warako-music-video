@@ -72,3 +72,13 @@ R2とも互いにも同じ構図にしない。段階が進むほど虹との距
 - 新規画像の女の子は後ろ姿・顔なしにして、既存の基準画との顔の不一致を避ける。
 - 画像に文字を入れない。
 - 「おかえりって」の時には虹を出さない(R7で終わらせる)。
+
+## 追記: RAINBOW_03a-2 (R3b: 0:52.3〜0:53.7) — 比較版 v3c_r3b の差し込み用(任意)
+
+- 使用位置: 1サビの2つ目の「虹の向こうで」(52.32)。虹を見て → 虹へ向かい → 次の `p014_015_first_step` で一歩踏み出す、の「虹へ向かう」。
+- 対応する歌詞: 虹の向こうで(2つ目。もう一度の直前)
+- 必要な構図: 16:9。RAINBOW_03a(R3: 虹の奥へ続く道)とは別の構図。**視点が虹へ向かって歩いている感じ**(手前の道・足元から虹の方へ)。人物は後ろ姿か影だけ(顔なし)、または人物なしで足元の道だけ。虹は画面上部〜中央に明確に見える。
+- 色: R3 よりやや暖かい昼の光。
+- 物語上の意味: 虹を見る → 虹へ向かう → 自分の足で一歩(p014)。まだ会えない。
+- prompt案: "Soft anime illustration, 16:9. A first-person view from just behind a girl's feet on a gentle flower path that leads up toward a clear rainbow in the upper part of the frame; her shadow or the hem of her skirt barely visible, face never shown. Warm daylight after rain, pastel colours, painterly picture-book style. No text."
+- 現在の仮置き: 既存の p030 左頁の別の切り出し(押し込み)。**同じ絵の再構図なので、R3 とは見た目の差が小さい。** 新規画像が来たら差し替える。

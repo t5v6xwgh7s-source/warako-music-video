@@ -69,10 +69,19 @@ else:
             print(f"   {a['text']}: baseline {a['start']}-{a['end']}  now {b['start']}-{b['end']}")
 nf_b = [c for c in base["cuts"] if not is_frozen(c)]
 nf_c = [c for c in cur["cuts"] if not is_frozen(c)]
-if nf_b == nf_c:
+def sig(c):
+    return json.dumps(c, sort_keys=True, ensure_ascii=False)
+sb, sc = {sig(c): c for c in nf_b}, {sig(c): c for c in nf_c}
+removed = [sb[k] for k in sb if k not in sc]
+added = [sc[k] for k in sc if k not in sb]
+if not removed and not added:
     say("OK", "all other cuts (incl. rainbow cues R1-R5) unchanged")
 else:
-    say("CHANGED", f"non-frozen cuts differ from the baseline (allowed only as a deliberate edit): {sum(1 for a,b in zip(nf_b,nf_c) if a!=b) + abs(len(nf_b)-len(nf_c))} rows")
+    say("CHANGED", f"non-frozen cuts differ from the baseline (allowed only as a deliberate edit): {len(removed)} baseline rows replaced by {len(added)} rows")
+    for c in removed:
+        print(f"   - baseline {c['key']}{'['+c['page']+']' if c['page'] else ''} {c['t0']}-{c['t1']} fade {c['fade']} tag {c['tag']}")
+    for c in added:
+        print(f"   + now      {c['key']}{'['+c['page']+']' if c['page'] else ''} {c['t0']}-{c['t1']} fade {c['fade']} tag {c['tag']}")
 for k in ("qr_mode", "qr_tail", "end_card_image"):
     if base[k] == cur[k]:
         say("OK", f"{k} = {cur[k]}")

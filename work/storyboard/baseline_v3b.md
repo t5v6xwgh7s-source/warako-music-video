@@ -29,3 +29,15 @@
 - 条件: アスペクト比が現在と同じ **2:3(縦長)**。違う場合は警告を出す(構図が変わるため、目で確認してから採用する)。
 - 現在の画像は `assets/images/oyabun_bar_v1_900x1350.jpg` に控えがある。置き換えると `check_baseline.py` が「end_card_image が変わった」と報告する(固定地点のタイミングは変わらない)。
 - 差し替えたら、END の3地点を目で確認する(顔・手・徳利が窓に収まっているか)。
+
+## 変種(variant)の作り方(baselineを変えずに1箇所ずつ試す)
+- `build_mv.py` の `VARIANTS` に、基準のカット表への小さな差分を名前付きで登録する。基準のカット表(`CUTS`)は変更しない。
+- `python3 scripts/build_mv.py --variant <name>` → `output/preview/mv_<name>.mp4` と `work/storyboard/variants/<name>/timeline.md`(基準の `timeline.md` は上書きしない)。
+- `MV_VARIANT=<name> python3 scripts/check_baseline.py` で固定地点(R6/R7/END)が変わっていないことと、変更した行の一覧を確認。
+- `python3 scripts/variant_diff.py <name>` で、baselineとのフレーム比較・変更窓の外が同一であることの確認(`diff_vs_baseline.md`)。
+- 登録済み: `v3c_r3b`(0:52.32 R3b。下記)。
+
+### v3c_r3b (0:48〜0:56 だけを変更)
+- 変更: R3(虹パン)の終わりを52.0→51.9秒、別構図の虹R3b(51.9〜53.7、押し込み)を挿入、p014は53.7〜56.0(パンの始点を.34→.40)。
+- 変更窓の外・R6/R7/ENDは、baselineとフレームが完全一致(PSNR 99dB)。
+- 比較資料: `work/storyboard/variants/v3c_r3b/`(`diff_vs_baseline.md`、`compare_baseline_vs_variant.jpg`、`rainbow_cues.md`、`timeline.md`)。
