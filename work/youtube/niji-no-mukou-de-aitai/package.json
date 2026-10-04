@@ -27,13 +27,21 @@
   "sha256": "697cd2b6a854c386a937339d4dcc0cf36504fed66bdc30637d3eff6d4992cfa5"
  },
  "thumbnail": {
-  "selected": null,
+  "selected": "work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_b_rainbow_rabbit.jpg",
   "candidates": [
    "work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_a_rainbow.jpg",
    "work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_b_rainbow_rabbit.jpg",
    "work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_c_girl_rabbit.jpg"
   ],
-  "text": "虹の向こうで会いたい"
+  "text": "虹の向こうで会いたい",
+  "history": [
+   {
+    "at": "2026-10-04 02:41:00 +0000",
+    "selected": "work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_b_rainbow_rabbit.jpg",
+    "decided_by": "human",
+    "reason": "虹・向こうを向くうさぎ・続く道・タイトルが一つの入口になる。親分は出さず、答えを見せない。他の2案(少女+うさぎ / 虹だけ)は残し、反応が弱ければ差し替えて比較する"
+   }
+  ]
  },
  "title": "虹の向こうで会いたい｜Music Video",
  "description": "「またね」って言った、その先で。\n\n離れていても、\n季節がいくつ過ぎても、\n心のどこかに残っている人がいる。\n\n虹の向こうで、\nもう一度会えたなら。\n\n『虹の向こうで会いたい』\nMusic Video\n\nTrinity of Spirits 115 / わらこ39⭐︎STAR’s",
@@ -42,7 +50,7 @@
  "category_id": "10",
  "visibility": "private_until_human_publishes",
  "validation": {
-  "checked_at": "2026-10-04 02:38:07 +0000",
+  "checked_at": "2026-10-04 02:41:28 +0000",
   "technical": [
    "[PASS] full decode without errors",
    "[PASS] size 1920x1080 (expected 1920x1080)",
@@ -56,8 +64,7 @@
   ],
   "blocking": [],
   "warnings": [
-   "no tags (optional)",
-   "no thumbnail selected yet (human choice)"
+   "no tags (optional)"
   ],
   "ok": true
  },

@@ -32,7 +32,7 @@ Trinity of Spirits 115 / わらこ39⭐︎STAR’s
 (なし)
 
 ## 5. サムネイル
-- (未選択: 候補から選ぶ) work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_a_rainbow.jpg, work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_b_rainbow_rabbit.jpg, work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_c_girl_rabbit.jpg
+- work/youtube/niji-no-mukou-de-aitai/thumbnails/thumb_b_rainbow_rabbit.jpg
 
 ## 6. 公開の手順(人間が行う)
 1. YouTube Studio → 作成 → 動画をアップロード → 上のファイル
@@ -43,6 +43,5 @@ Trinity of Spirits 115 / わらこ39⭐︎STAR’s
 6. 公開できたら、動画のURLをClaudeへ渡す(記録は `yt_package.py record`)
 
 ## 検査結果
-- OK / 確認日時 2026-10-04 02:36:44 +0000
+- OK / 確認日時 2026-10-04 02:41:28 +0000
 - 注意: no tags (optional)
-- 注意: no thumbnail selected yet (human choice)
