@@ -16,7 +16,9 @@ import argparse, glob, os, subprocess, sys
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-W, H = 1920, 1080
+FORMAT = os.environ.get("MV_FORMAT", "")          # "vertical" = 1080x1920 (9:16) re-composition of the same cut list
+VERTICAL = FORMAT == "vertical"
+W, H = (1080, 1920) if VERTICAL else (1920, 1080)
 AUDIO = os.path.join(ROOT, "assets/audio/song.m4a")
 IMG = os.path.join(ROOT, "assets/images")
 FONT = os.path.join(ROOT, "assets/fonts/ZenMaruGothic-Medium.ttf")   # soft rounded gothic (OFL)
@@ -198,7 +200,68 @@ VARIANTS = {"v3c_r3b": _v3c_r3b, "v3d_r3_continuous": _v3d_r3_continuous}
 
 
 def variant_dir():
-    return os.path.join(ROOT, "work/storyboard/variants", VARIANT) if VARIANT else os.path.join(ROOT, "work/storyboard")
+    name = (VARIANT + ("_vertical" if VERTICAL else "")) if VARIANT else ("vertical" if VERTICAL else "")
+    return os.path.join(ROOT, "work/storyboard/variants", name) if name else os.path.join(ROOT, "work/storyboard")
+
+
+# --- vertical (9:16) re-composition ---------------------------------------------------------------------
+# Same cut list, same timing, same transitions (so the sync / frozen points are untouched); only the framing changes.
+# t0 -> (mode, region, cam_from, cam_to).  cover: a 9:16 window over the image (or one page), subject-aware centre + slow pan;
+# fit: a region shown whole, fitted to the width, on a blurred extension of itself (used where a crop would lose the story).
+# cam = (cx, cy, zoom); zoom 1.0 = the largest 9:16 window; for fit, zoom scales the fitted band around (cx, cy) of the region.
+_V = lambda cx, cy=.5, z=1.0: (cx, cy, z)
+RB_TOP = (0.0, 0.04, 1.0, 0.34)       # the sky/rainbow strip of the rainbow page: no animal in it
+VERT_PLAN = {
+    0.00: ("cover", None, _V(.56, .66, 1.0), _V(.56, .66, 1.07)),
+    5.50: ("cover", None, _V(.60), _V(.56, .5, 1.06)),
+    12.00: ("cover", None, _V(.5), _V(.5, .5, 1.02)),
+    15.30: ("cover", None, _V(.62), _V(.70, .72, 1.35)),
+    18.10: ("fit", RB_TOP, _V(.5, .5, 1.65), _V(.5, .5, 1.5)),                 # R1 far, pale
+    23.20: ("cover", None, _V(.76), _V(.72, .5, 1.08)),                           # the curled rabbit: waiting is over (no sweeping pan over empty snow)
+    26.00: ("cover", None, _V(.36), _V(.84)),
+    31.00: ("cover", None, _V(.78), _V(.56)),
+    33.70: ("fit", (0.0, 0.06, 1.0, 0.32), _V(.5, .5, 1.8), _V(.5, .5, 1.9)),  # R2 clear rainbow
+    36.90: ("cover", None, _V(.5), _V(.5, .5, 1.06)),                              # R2' whole page: the path and a presence beyond
+    38.60: ("fit", None, _V(.5), _V(.5, .5, 1.02)),                                # both the rabbit and the girl, uncropped
+    41.30: ("fit", None, _V(.5), _V(.5, .5, 1.02)),                                # stacked day/night page, shown whole
+    44.00: ("cover", None, _V(.60), _V(.64, .55, 1.06)),
+    48.00: ("fit", RB_TOP, _V(.45, .5, 1.7), _V(.5, .55, 2.2)),                   # R3 one continuous shot toward the glow
+    53.70: ("cover", None, _V(.58), _V(.78)),
+    56.00: ("cover", None, _V(.28), _V(.80)),
+    63.00: ("cover", None, _V(.27), _V(.72)),
+    70.00: ("cover", None, _V(.72, .5, 1.1), _V(.66)),
+    75.40: ("cover", None, _V(.5, .40, 1.18), _V(.5, .46, 1.28)),         # R4 nearer: arc + the rabbit seen from behind
+    81.40: ("cover", None, _V(.5), _V(.5, .5, 1.03)),
+    83.40: ("cover", None, _V(.5), _V(.5, .5, 1.03)),
+    85.30: ("fit", None, _V(.5), _V(.5, .5, 1.04)),                                # four-seasons collage, whole
+    88.10: ("fit", (0.2, 0.12, 0.8, 0.34), _V(.5, .5, 1.3), _V(.5, .5, 1.9)),       # R5 toward the light
+    92.25: ("cover", None, _V(.40), _V(.42, .5, 1.05)),
+    95.10: ("cover", None, _V(.46), _V(.48, .5, 1.05)),
+    98.00: ("cover", None, _V(.5), _V(.5, .5, 1.02)),
+    104.75: ("cover", None, _V(.5), _V(.45, .5, 1.06)),
+    107.90: ("cover", None, _V(.5), _V(.55, .5, 1.06)),
+    111.00: ("cover", None, _V(.36), _V(.44, .5, 1.04)),
+    113.70: ("cover", None, _V(.62), _V(.64, .5, 1.04)),
+    116.50: ("cover", None, _V(.34), _V(.38, .5, 1.04)),
+    119.00: ("cover", None, _V(.68), _V(.70, .5, 1.04)),
+    121.50: ("cover", None, _V(.44), _V(.56)),
+    124.40: ("cover", None, _V(.58), _V(.60, .5, 1.02)),
+    127.25: ("cover", None, _V(.55), _V(.55, .5, 1.1)),
+    129.90: ("cover", None, _V(.66), _V(.66, .5, 1.02)),
+    131.50: ("cover", None, _V(.38), _V(.40, .5, 1.02)),
+    133.20: ("cover", None, _V(.5), _V(.5, .5, 1.06)),
+    135.00: ("cover", None, _V(.22), _V(.28, .5, 1.06)),
+    138.50: ("cover", None, _V(.30), _V(.64)),
+    142.00: ("cover", None, _V(.60), _V(.60)),
+    146.80: ("cover", None, _V(.50), _V(.66)),                           # R6 the door opens onto warm light
+    150.00: ("cover", None, _V(.28), _V(.72)),
+    154.00: ("cover", None, _V(.25), _V(.66)),
+    160.40: ("cover", None, _V(.22), _V(.40, .5, 1.05)),
+    167.60: ("fit", RB_TOP, _V(.5, .5, 1.6), _V(.5, .5, 1.5)),                     # R7 the last, faint rainbow
+    170.60: ("fit", (0.2, 0.12, 0.8, 0.34), _V(.5, .5, 1.5), _V(.5, .5, 2.0)),     # R7 rainbow colours -> warm light
+    172.80: ("cover", None, _V(.62), _V(.62, .5, 1.015)),
+    179.00: ("cover", None, _V(.5), _V(.5, .5, 1.03)),                              # END: the boss's face, hand and bottle fit the 9:16 window
+}
 
 
 def resolve_cuts(dur):
@@ -208,7 +271,15 @@ def resolve_cuts(dur):
     for key, t0, t1, sec, theme, motion, cf, ct, fade, page, *extra in rows:
         if key == "END_CARD" and custom_end:     # portrait 宇宙酒場 picture: frame the boss's face, hand and the bottle (16:9 window)
             cf, ct = S(.5, .35, 1.00), S(.5, .35, 1.03)
-        cuts.append(dict(key=key, t0=t0, t1=dur if t1 is None else t1, sec=sec, theme=theme, motion=motion,
+        vmode = region = None
+        if VERTICAL:
+            vp = VERT_PLAN[round(t0, 2)]
+            vmode, region, cf, ct = vp
+            if page in ("L", "R"):
+                page = page + "c"                       # pages are cropped (not letterboxed) in 9:16
+            if vmode == "fit" and page == "Lc" and region is None:
+                pass
+        cuts.append(dict(vmode=vmode, region=region, key=key, t0=t0, t1=dur if t1 is None else t1, sec=sec, theme=theme, motion=motion,
                          cf=cf, ct=ct, fade=fade, page=page, tag=(extra[0].get('tag') if extra else None),
                          sat=(extra[0].get('sat') if extra else None), bloom=bool(extra and extra[0].get('bloom'))))
     return cuts
@@ -242,7 +313,7 @@ def load_qr_plate():
         run += 1
     mod = run / 7.0                                  # the finder pattern is 7 modules wide
     n = int(round(crop.width / mod))
-    px = 12
+    px = 16 if VERTICAL else 12
     plate = None
     try:
         cell_w, cell_h = crop.width / n, crop.height / n
@@ -279,27 +350,42 @@ def load_qr_plate():
 
 class Still:
     """One source image.
-    page=None : full-bleed 16:9 window over the whole image.
-    page="L"/"R": a single book page shown whole on a blurred backdrop (page_frame).
-    page="Lc"/"Rc": full-bleed 16:9 window limited to one page (cam = cx, cy, zoom relative to that page)."""
-    def __init__(self, key, page=None):
+    page=None : full-bleed window (aspect W:H) over the whole image.
+    page="L"/"R": a single book page shown whole on a blurred backdrop (page_frame; landscape only).
+    page="Lc"/"Rc": full-bleed window limited to one page (cam = cx, cy, zoom relative to that page).
+    vmode="fit" (vertical): a region of the image/page shown whole, fitted to the width, on a blurred extension of itself."""
+    def __init__(self, key, page=None, vmode=None, region=None):
         self.im = Image.open(img_path(key)).convert("RGB")
         w, h = self.im.size
-        if w / h >= 16 / 9:
-            self.bh, self.bw = h, h * 16 / 9
+        A = W / H
+        if w / h >= A:
+            self.bh, self.bw = h, h * A
         else:
-            self.bw, self.bh = w, w * 9 / 16
+            self.bw, self.bh = w, w / A
         self.page = page
+        self.vmode = vmode
         if page:
             half = w // 2
             side = page[0]
             box = (0, 0, half - GUTTER, h) if side == "L" else (half + GUTTER, 0, w, h)
             self.pg = self.im.crop(box)
-            if len(page) == 1:
+            if len(page) == 1 and not VERTICAL:
                 bg = self.pg.resize((W, int(self.pg.height * W / self.pg.width)), Image.BICUBIC)
                 y0 = (bg.height - H) // 2
                 bg = bg.crop((0, y0, W, y0 + H)).filter(ImageFilter.GaussianBlur(48))
                 self.bg = Image.eval(bg, lambda v: int(v * 0.55))
+        if vmode == "fit":
+            base = self.pg if page else self.im
+            bw_, bh_ = base.size
+            r = region or (0, 0, 1, 1)
+            self.fit_src = base.crop((int(r[0] * bw_), int(r[1] * bh_), int(r[2] * bw_), int(r[3] * bh_)))
+            fs = self.fit_src
+            sc = max(W / fs.width, H / fs.height)
+            bg = fs.resize((int(fs.width * sc) + 1, int(fs.height * sc) + 1), Image.BICUBIC)
+            x0, y0 = (bg.width - W) // 2, (bg.height - H) // 2
+            bg = bg.crop((x0, y0, x0 + W, y0 + H)).filter(ImageFilter.GaussianBlur(70))
+            self.bg = Image.eval(bg, lambda v: int(v * 0.92))
+            self._masks = {}
 
     def frame(self, cam):
         cx, cy, z = cam
@@ -312,11 +398,39 @@ class Still:
     def crop_frame(self, cam):
         cx, cy, z = cam
         pw, ph = self.pg.size
-        bw = pw / z
-        bh = bw * 9 / 16
+        A = W / H
+        if pw / ph >= A:
+            bh = ph / z
+            bw = bh * A
+        else:
+            bw = pw / z
+            bh = bw / A
         x0 = min(max(cx * pw - bw / 2, 0), pw - bw)
         y0 = min(max(cy * ph - bh / 2, 0), ph - bh)
         return self.pg.transform((W, H), Image.EXTENT, (x0, y0, x0 + bw, y0 + bh), Image.BICUBIC)
+
+    def fit_frame(self, cam):
+        cx, cy, z = cam
+        fs = self.fit_src
+        fw = W * z
+        fh = fw * fs.height / fs.width
+        fg = fs.resize((int(round(fw)), int(round(fh))), Image.BICUBIC)
+        out = self.bg.copy()
+        x = int(round(W / 2 - cx * fw))
+        y = int(round(H / 2 - cy * fh))
+        key = fg.size
+        if key not in self._masks:                  # soft top/bottom edge so the sharp band melts into its blurred extension
+            from PIL import ImageChops
+            m = Image.new("L", fg.size, 255)
+            ramp = min(60, fg.height // 4)
+            d = ImageDraw.Draw(m)
+            for i in range(ramp):
+                v = int(255 * i / ramp)
+                d.line([(0, i), (fg.width, i)], fill=v)
+                d.line([(0, fg.height - 1 - i), (fg.width, fg.height - 1 - i)], fill=v)
+            self._masks[key] = m
+        out.paste(fg, (x, y), self._masks[key])
+        return out
 
     def page_frame(self, cam):
         z = cam[2]
@@ -480,16 +594,18 @@ class Renderer:
             self.layouts.append((cap, layout_caption(cap, anchor)))
 
     def still(self, cut):
-        k = (cut["key"], cut["page"])
+        k = (cut["key"], cut["page"], cut.get("vmode"), tuple(cut["region"]) if cut.get("region") else None)
         if k not in self.stills:
-            self.stills[k] = Still(cut["key"], cut["page"])
+            self.stills[k] = Still(cut["key"], cut["page"], cut.get("vmode"), cut.get("region"))
         return self.stills[k]
 
     def cut_frame(self, cut, t):
         u = (t - cut["t0"]) / max(cut["t1"] - cut["t0"], 1e-6)
         cam = lerp_cam(cut["cf"], cut["ct"], min(max(u, 0), 1))
         st = self.still(cut)
-        if cut["page"] and len(cut["page"]) == 2:
+        if cut.get("vmode") == "fit":
+            fr = st.fit_frame(cam)
+        elif cut["page"] and len(cut["page"]) == 2:
             fr = st.crop_frame(cam)
         else:
             fr = st.page_frame(cam) if cut["page"] else st.frame(cam)
@@ -636,6 +752,7 @@ def main():
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--crf", type=int, default=23)
     ap.add_argument("--variant", default=None, help="named patch of the baseline cut list (see VARIANTS); output goes to output/preview/mv_<variant>.mp4")
+    ap.add_argument("--format", default=None, choices=["landscape", "vertical"], help="vertical = 1080x1920 (9:16) re-composition of the same cut list")
     ap.add_argument("--timeline-only", action="store_true")
     ap.add_argument("--lyrics", action="store_true", help="draw the lyric telop (off by default since v3)")
     ap.add_argument("--title", action="store_true", help="draw the intro title (off by default since v3)")
@@ -644,6 +761,9 @@ def main():
     ap.add_argument("--frames-dir", default=os.path.join(ROOT, "work/temp/qa"))
     a = ap.parse_args()
 
+    if a.format == "vertical" and os.environ.get("MV_FORMAT") != "vertical":   # W/H are module constants: re-run with the format set
+        os.environ["MV_FORMAT"] = "vertical"
+        os.execv(sys.executable, [sys.executable] + sys.argv)
     global SHOW_LYRICS, SHOW_TITLE, VARIANT
     SHOW_LYRICS, SHOW_TITLE = a.lyrics, a.title
     if a.variant:
@@ -651,7 +771,7 @@ def main():
             sys.exit(f"unknown variant {a.variant}; known: {', '.join(VARIANTS)}")
         VARIANT = a.variant
         if a.out == ap.get_default("out"):
-            a.out = os.path.join(ROOT, f"output/preview/mv_{a.variant}.mp4")
+            a.out = os.path.join(ROOT, f"output/preview/mv_{a.variant}{'_vertical' if VERTICAL else ''}.mp4")
     dur = audio_duration()
     r = Renderer(dur, a.fps)
     qr_path = r.qr[0] if r.qr else None
