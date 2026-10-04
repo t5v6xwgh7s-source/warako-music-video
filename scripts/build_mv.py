@@ -18,6 +18,7 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FORMAT = os.environ.get("MV_FORMAT", "")          # "vertical" = 1080x1920 (9:16) re-composition of the same cut list
 VERTICAL = FORMAT == "vertical"
+VFILL = VERTICAL and os.environ.get("MV_VFILL") == "1"   # rainbow cuts as bold full-bleed crops instead of fitted bands
 W, H = (1080, 1920) if VERTICAL else (1920, 1080)
 AUDIO = os.path.join(ROOT, "assets/audio/song.m4a")
 IMG = os.path.join(ROOT, "assets/images")
@@ -200,7 +201,7 @@ VARIANTS = {"v3c_r3b": _v3c_r3b, "v3d_r3_continuous": _v3d_r3_continuous}
 
 
 def variant_dir():
-    name = (VARIANT + ("_vertical" if VERTICAL else "")) if VARIANT else ("vertical" if VERTICAL else "")
+    name = (VARIANT + (("_vertical_fill" if VFILL else "_vertical") if VERTICAL else "")) if VARIANT else ("vertical" if VERTICAL else "")
     return os.path.join(ROOT, "work/storyboard/variants", name) if name else os.path.join(ROOT, "work/storyboard")
 
 
@@ -273,7 +274,7 @@ def resolve_cuts(dur):
             cf, ct = S(.5, .35, 1.00), S(.5, .35, 1.03)
         vmode = region = None
         if VERTICAL:
-            vp = VERT_PLAN[round(t0, 2)]
+            vp = VERT_FILL.get(round(t0, 2)) if VFILL and round(t0, 2) in VERT_FILL else VERT_PLAN[round(t0, 2)]
             vmode, region, cf, ct = vp
             if page in ("L", "R"):
                 page = page + "c"                       # pages are cropped (not letterboxed) in 9:16
@@ -283,6 +284,19 @@ def resolve_cuts(dur):
                          cf=cf, ct=ct, fade=fade, page=page, tag=(extra[0].get('tag') if extra else None),
                          sat=(extra[0].get('sat') if extra else None), bloom=bool(extra and extra[0].get('bloom'))))
     return cuts
+
+
+# "Fill" alternative for the rainbow cuts (same t0/t1/timing; framing only): the 9:16 screen is filled with rainbow and light.
+# Left/right information is given up on purpose. Distance story: far (side of the arc) -> the arc -> toward the glow -> into the light.
+# Page p030 left is 3:4, so z=2 shows its top half, z=3 its top third. Used only with MV_VFILL=1 (--vfill).
+VERT_FILL = {
+    18.10: ("cover", None, _V(.25, .20, 2.3), _V(.31, .21, 2.1)),     # R1 far: the left end of the arc in cloud, small and pale
+    33.70: ("cover", None, _V(.44, .15, 2.8), _V(.45, .16, 2.6)),     # R2 the arc, centred and clear
+    48.00: ("cover", None, _V(.43, .22, 2.3), _V(.46, .25, 3.4)),     # R3 one continuous move toward the glow
+    88.10: ("cover", None, _V(.46, .25, 3.0), _V(.47, .27, 4.2)),     # R5 inside the light, nearly there
+    167.60: ("cover", None, _V(.84, .17, 2.4), _V(.82, .18, 2.3)),    # R7 the last far rainbow, from the other side
+    170.60: ("cover", None, _V(.46, .24, 3.0), _V(.47, .26, 4.0)),    # R7 rainbow colours -> warm light
+}
 
 
 def img_path(key):
@@ -753,6 +767,7 @@ def main():
     ap.add_argument("--crf", type=int, default=23)
     ap.add_argument("--variant", default=None, help="named patch of the baseline cut list (see VARIANTS); output goes to output/preview/mv_<variant>.mp4")
     ap.add_argument("--format", default=None, choices=["landscape", "vertical"], help="vertical = 1080x1920 (9:16) re-composition of the same cut list")
+    ap.add_argument("--vfill", action="store_true", help="vertical: rainbow cuts as bold full-bleed crops (VERT_FILL)")
     ap.add_argument("--timeline-only", action="store_true")
     ap.add_argument("--lyrics", action="store_true", help="draw the lyric telop (off by default since v3)")
     ap.add_argument("--title", action="store_true", help="draw the intro title (off by default since v3)")
@@ -764,6 +779,9 @@ def main():
     if a.format == "vertical" and os.environ.get("MV_FORMAT") != "vertical":   # W/H are module constants: re-run with the format set
         os.environ["MV_FORMAT"] = "vertical"
         os.execv(sys.executable, [sys.executable] + sys.argv)
+    if a.vfill and os.environ.get("MV_VFILL") != "1":
+        os.environ["MV_VFILL"] = "1"
+        os.execv(sys.executable, [sys.executable] + sys.argv)
     global SHOW_LYRICS, SHOW_TITLE, VARIANT
     SHOW_LYRICS, SHOW_TITLE = a.lyrics, a.title
     if a.variant:
@@ -771,7 +789,7 @@ def main():
             sys.exit(f"unknown variant {a.variant}; known: {', '.join(VARIANTS)}")
         VARIANT = a.variant
         if a.out == ap.get_default("out"):
-            a.out = os.path.join(ROOT, f"output/preview/mv_{a.variant}{'_vertical' if VERTICAL else ''}.mp4")
+            a.out = os.path.join(ROOT, f"output/preview/mv_{a.variant}{('_vertical_fill' if VFILL else '_vertical') if VERTICAL else ''}.mp4")
     dur = audio_duration()
     r = Renderer(dur, a.fps)
     qr_path = r.qr[0] if r.qr else None
