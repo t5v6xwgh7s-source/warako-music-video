@@ -13,7 +13,7 @@ Usage:
     assets/images/oyabun_bar.* -> used instead of the book's last spread for the end card (see END_CARD_IMAGE)
 """
 import argparse, glob, os, subprocess, sys
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W, H = 1920, 1080
@@ -24,6 +24,8 @@ LYRICS_TSV = os.path.join(ROOT, "work/storyboard/lyrics_timing.tsv")
 QR_GLOB = os.path.join(ROOT, "assets/qr/*.png")
 QR_MIN_SECONDS = 10.0
 FADE_IN, FADE_OUT = 1.2, 1.2
+SHOW_LYRICS = False     # v3 direction: no lyric telop, no title. lyrics_timing.tsv is kept as sync reference (enable with --lyrics)
+SHOW_TITLE = False
 PAGE_TOP = 190          # page-mode: top band reserved for lyrics (blurred backdrop)
 GUTTER = 4              # px trimmed next to the fold in page-mode
 
@@ -34,29 +36,43 @@ P = lambda z0=1.0, z1=1.0: ((.5, .5, z0), (.5, .5, z1))     # page-mode camera =
 # key, t0, t1, section, theme, motion, cam_from, cam_to, dissolve_in, page(None|"L"|"R")
 # Page rows ("@L"/"@R") show ONE page of a two-page spread on a blurred backdrop: the book's pages are
 # independent paintings and the fold shows as a hard seam if the spread is panned across (see asset_review.md).
+# Rainbow cues R1..R7 (v3b). Cut-in at a rainbow lyric is short (0.3s) so the rainbow is already on screen when the word is sung;
+# elsewhere the calm dissolves are kept. tag=Rn marks the cut that must be on screen at that cue (checked by scripts/rainbow_cues.py).
+# sat = colour grade only (no painting): R1 paler/farther, R2 stronger.
+RB = "p030_031_farewell"      # the only existing picture with a rainbow (left page = rainbow bridge)
 CUTS = [
-    ("p001_title",            0.00,   5.50, "INTRO",       "雪と灯り。物語はまだ始まらない",          "zoom in", S(.5,.66,1.00), S(.5,.66,1.07), 0.0, None),
+    ("p001_title",            0.00,   5.50, "INTRO",       "雪と灯り。まだ虹は見せない",              "zoom in", S(.5,.66,1.00), S(.5,.66,1.07), 0.0, None),
     ("p002_003_warmth",       5.50,  12.00, "INTRO",       "遠い記憶のぬくもり",                      "pan →",   S(.30,.5,1.02), S(.42,.5,1.06), 1.6, None),
     ("p004_005_snow",        12.00,  15.30, "VERSE 1",     "ぬくもりが消える。ひとりの雪の路地(左頁)", "still",   *P(1.0,1.02),                    1.2, "L"),
-    ("p004_005_snow",        15.30,  19.00, "VERSE 1",     "ゴミ袋の陰の小さなうさぎ(右頁)",           "zoom in", *P(1.0,1.05),                    1.0, "R"),
-    ("p006_007_stop_waiting",19.00,  26.00, "VERSE 1",     "待つのをやめた",                           "zoom in", S(.5,.5,1.00),  S(.46,.5,1.09), 1.2, None),
-    ("p008_009_found",       26.00,  33.50, "VERSE 1",     "雪を踏む足音。女の子が来る",                "pan →",   S(.32,.5,1.04), S(.62,.5,1.04), 1.2, None),
-    ("p010_011_distance",    33.50,  38.75, "PRE-CHORUS",  "怖かったね。すぐには信じられない",          "pan ←",   S(.62,.5,1.03), S(.40,.5,1.03), 1.0, None),
-    ("p012_013_every_day",   38.75,  41.40, "PRE-CHORUS",  "昨日もいた(左頁)",                         "still",   *P(1.0,1.015),                   1.0, "L"),
-    ("p012_013_every_day",   41.40,  44.00, "PRE-CHORUS",  "今日もいる。明日もたぶんいる(右頁)",        "still",   *P(1.0,1.015),                   0.9, "R"),
-    ("p014_015_first_step",  44.00,  50.00, "CHORUS 1",    "自分の足で近づく",                         "pan →",   S(.34,.5,1.02), S(.60,.5,1.02), 0.8, None),
-    ("p016_017_safe",        50.00,  56.00, "CHORUS 1",    "もう一度、春が来た",                       "zoom in", S(.5,.5,1.00),  S(.58,.55,1.12), 0.8, None),
-    ("p018_019_seasons",     56.00,  66.00, "BREATH",      "春夏秋冬。季節が過ぎる",                   "pan →",   S(.26,.5,1.00), S(.74,.5,1.00), 2.0, None),
-    ("p020_021_farewell",    66.00,  75.75, "VERSE 2",     "静かな別れ。空いた場所(長く止める)",        "still",   S(.5,.5,1.00),  S(.5,.5,1.02),  1.8, None),
-    ("p022_023_new_friend",  75.75,  82.00, "VERSE 2",     "黄金色のうさぎと暮らす",                   "zoom out",S(.55,.5,1.10), S(.5,.5,1.00),  1.2, None),
-    ("p024_025_meals_naps",  82.00,  84.60, "VERSE 2",     "一緒にごはん(左頁)",                       "zoom in", *P(1.0,1.03),                    1.0, "L"),
-    ("p024_025_meals_naps",  84.60,  87.00, "VERSE 2",     "一緒にお昼寝(右頁)",                       "zoom in", *P(1.0,1.03),                    0.8, "R"),
-    ("p026_027_seasons",     87.00,  92.25, "VERSE 2",     "四つの季節の、いつもとなり(4コマを一枚で)", "still",   S(.5,.5,1.00),  S(.5,.5,1.03),  1.0, None),
+    ("p004_005_snow",        15.30,  18.10, "VERSE 1",     "ゴミ袋の陰の小さなうさぎ(右頁)",           "zoom in", *P(1.0,1.05),                    1.0, "R"),
+    # R1 「空にかかった虹が」 18.80: 遠い淡い虹。再会は見せない。仮素材=虹の橋の頁の上部(新規静止画RAINBOW_01が来たら差替)
+    (RB,                     18.10,  23.20, "VERSE 1",     "R1 遠い淡い虹(未来をつないだ)",           "zoom out",S(.5,.12,1.34), S(.5,.12,1.26), 0.9, "Lc", dict(tag="R1", sat=0.80)),
+    ("p006_007_stop_waiting",23.20,  26.00, "VERSE 1",     "待つのをやめた(記憶へ戻る)",               "zoom in", S(.5,.5,1.00),  S(.46,.5,1.09), 1.0, None),
+    ("p008_009_found",       26.00,  31.00, "VERSE 1",     "雪を踏む足音。女の子が来る",                "pan →",   S(.32,.5,1.04), S(.62,.5,1.04), 1.2, None),
+    ("p010_011_distance",    31.00,  33.70, "PRE-CHORUS",  "怖かったね。すぐには信じられない",          "pan ←",   S(.62,.5,1.03), S(.48,.5,1.03), 1.0, None),
+    # R2 「虹の向こうで会いたい」 34.20: 虹がすでに明確に見えている状態でCUT(0.3秒)。R1より強く。相手は見せない。
+    (RB,                     33.70,  36.90, "CHORUS 1",    "R2 明確な虹。会いたいがまだ届かない",       "zoom in", S(.5,.15,1.42), S(.5,.17,1.50), 0.3, "Lc", dict(tag="R2", sat=1.12)),
+    (RB,                     36.90,  38.60, "CHORUS 1",    "R2' 虹の道の遠くに存在の気配(ひとりじゃない)", "zoom in", *P(1.0,1.05),                   0.9, "L", dict(tag="R2")),
+    ("p012_013_every_day",   38.60,  41.30, "PRE-CHORUS",  "昨日もいた(左頁)",                         "still",   *P(1.0,1.015),                   1.0, "L"),
+    ("p012_013_every_day",   41.30,  44.00, "PRE-CHORUS",  "今日もいる。明日もたぶんいる(右頁)",        "still",   *P(1.0,1.015),                   0.9, "R"),
+    ("p016_017_safe",        44.00,  48.00, "CHORUS 1",    "心に咲く君の笑顔(温かい絵。動かしすぎない)", "zoom in", S(.5,.5,1.00),  S(.56,.53,1.07), 0.9, None),
+    # R3 「虹の向こうで／もう一度」 48.46: R2とは別の構図。虹の奥へ視線が進む(少し近づいた虹)
+    (RB,                     48.00,  52.00, "CHORUS 1",    "R3 少し近づいた虹。虹の奥へ視線が進む",      "pan →",   S(.30,.15,1.45), S(.64,.17,1.45), 0.5, "Lc", dict(tag="R3")),
+    ("p014_015_first_step",  52.00,  56.00, "CHORUS 1",    "自分の足で近づく(虹を残さず記憶へ戻る)",    "pan →",   S(.34,.5,1.02), S(.60,.5,1.02), 1.0, None),
+    ("p018_019_seasons",     56.00,  63.00, "BREATH",      "春夏秋冬。季節が過ぎる(虹はいったん消す)",   "pan →",   S(.26,.5,1.00), S(.74,.5,1.00), 2.0, None),
+    ("p020_021_farewell",    63.00,  70.00, "VERSE 2",     "静かな別れ。空いた場所(長く止める)",        "still",   S(.5,.5,1.00),  S(.5,.5,1.02),  1.8, None),
+    ("p022_023_new_friend",  70.00,  75.40, "VERSE 2",     "黄金色のうさぎと暮らす",                   "zoom out",S(.55,.5,1.10), S(.5,.5,1.00),  1.2, None),
+    # R4 2回目「虹の向こうで会いたい」 76.10: 1回目より近い。虹とその下の道、うさぎの後ろ姿(再会はまだ)。仮素材=同頁の寄り(RAINBOW_03a)
+    (RB,                     75.40,  81.40, "CHORUS 2",    "R4 近くの虹。道とうさぎの後ろ姿(まだ会えない)", "pan ↓",  S(.5,.30,1.00), S(.5,.335,1.02), 0.3, "Lc", dict(tag="R4", sat=1.05)),
+    ("p024_025_meals_naps",  81.40,  83.40, "VERSE 2",     "一緒にごはん(左頁・虹から記憶へ)",          "zoom in", *P(1.0,1.03),                    1.0, "L"),
+    ("p024_025_meals_naps",  83.40,  85.30, "VERSE 2",     "一緒にお昼寝(右頁)",                       "zoom in", *P(1.0,1.03),                    0.8, "R"),
+    ("p026_027_seasons",     85.30,  88.10, "VERSE 2",     "四つの季節の記憶(再会直前まで行かない)",    "still",   S(.5,.5,1.00),  S(.5,.5,1.03),  1.0, None),
+    # R5 2回目「虹の向こうで／もう一度」 88.76: もう少しで届く。虹の向こう側の光(RAINBOW_03b)
+    (RB,                     88.10,  92.25, "CHORUS 2",    "R5 もう少しで届く。虹の向こうの光へ寄る",    "zoom in", S(.5,.17,1.50), S(.5,.185,2.00), 0.5, "Lc", dict(tag="R5")),
     ("p028_029_love",        92.25,  95.10, "CHORUS 2",    "毎日がやさしかった(左頁)",                 "zoom in", *P(1.0,1.04),                    0.8, "L"),
     ("p028_029_love",        95.10,  98.00, "CHORUS 2",    "抱きしめる(右頁)",                         "zoom in", *P(1.0,1.04),                    0.7, "R"),
-    ("p030_031_farewell",    98.00, 102.50, "CHORUS 2",    "虹の橋を渡る(左頁・静止に近い)",           "still",   *P(1.0,1.02),                    1.0, "L"),
-    ("p030_031_farewell",   102.50, 104.75, "CHORUS 2",    "空いた寝床(右頁)",                         "still",   *P(1.0,1.02),                    1.0, "R"),
-    ("p032_033_quiet_room", 104.75, 107.90, "CHORUS 2",    "ぽっかり空いた場所(左頁)",                 "zoom in", *P(1.0,1.04),                    1.0, "L"),
+    ("p030_031_farewell",    98.00, 104.75, "CHORUS 2",    "空いた寝床(右頁・虹は出さない)",            "still",   *P(1.0,1.02),                    1.2, "R"),
+    ("p032_033_quiet_room", 104.75, 107.90, "CHORUS 2",    "雨上がりの窓辺(左頁・虹なし)",              "zoom in", *P(1.0,1.04),                    1.0, "L"),
     ("p032_033_quiet_room", 107.90, 111.00, "CHORUS 2",    "同じ窓辺、夕方(右頁)",                     "zoom in", *P(1.0,1.04),                    1.0, "R"),
     ("p034_035_figurine_found",111.00,113.70,"CHORUS 2",   "旅の途中の女の子(左頁)",                   "zoom in", *P(1.0,1.03),                    0.8, "L"),
     ("p034_035_figurine_found",113.70,116.50,"CHORUS 2",   "黄金のうさぎの置物と出会う(右頁)",         "zoom in", *P(1.0,1.03),                    0.8, "R"),
@@ -70,14 +86,17 @@ CUTS = [
     ("p042_043_lost",       133.20, 135.00, "BRIDGE",      "暗くなっていく路地(右頁)",                 "zoom in", *P(1.0,1.03),                    0.6, "R"),
     ("p044_045_voice",      135.00, 138.50, "BRIDGE",      "「……こっちだよ。」",                        "zoom in", S(.5,.5,1.00),  S(.5,.5,1.08),  0.7, None),
     ("p060_061_light",      138.50, 142.00, "BRIDGE",      "道の先の小さな灯り",                       "pan →",   S(.34,.5,1.03), S(.62,.5,1.03), 0.7, None),
-    ("p064_065_door",       142.00, 145.00, "BRIDGE",      "一枚の扉",                                 "still",   S(.5,.5,1.00),  S(.5,.5,1.00),  0.6, None),
-    ("p066_067_come_in",    145.00, 149.50, "LAST CHORUS", "扉の向こうの声「入んな」",                  "zoom in", S(.5,.5,1.00),  S(.5,.5,1.06),  0.5, None),
-    ("p068_069_first_sight",149.50, 154.00, "LAST CHORUS", "声だけだった、大きなうさぎ",                 "pan →",   S(.36,.5,1.03), S(.60,.5,1.03), 0.8, None),
-    ("p070_071_oyabun",     154.00, 160.00, "LAST CHORUS", "親分。怖くない、頼もしい",                   "pan →",   S(.30,.5,1.02), S(.58,.5,1.02), 0.8, None),
-    ("p080_081_recognition",160.00, 166.25, "LAST CHORUS", "雪の日|いま。「ずっとここにいたぞ」(静止)",  "still",   S(.5,.5,1.00),  S(.5,.5,1.00),  1.0, None),
-    ("p084_085_empty_seat", 166.25, 169.50, "OUTRO",       "席をひとつ空けておく",                     "still",   S(.5,.5,1.00),  S(.5,.5,1.02),  1.8, None),
-    ("p086_087_home",       169.50, 172.50, "OUTRO",       "どこにいても帰る場所はある",                "zoom in", S(.5,.5,1.00),  S(.56,.5,1.05), 1.8, None),
-    ("END_CARD",            172.50, None,   "END CARD",    "宇宙酒場。親分。「おかえりって」の余韻。QR", "zoom in", S(.5,.58,1.00), S(.5,.58,1.04), 2.5, None),
+    ("p064_065_door",       142.00, 146.80, "BRIDGE",      "一枚の扉(こちら側)",                       "still",   S(.5,.5,1.00),  S(.5,.5,1.00),  0.6, None),
+    # R6 「虹の向こうで会えたなら」 147.54: 虹を見る側 -> 向こう側へ。ここだけ通常と違う遷移(暖かな光のブルーム)。虹は描かない(RAINBOW_04は任意)
+    ("p066_067_come_in",    146.80, 150.00, "LAST SECTION","R6 扉の向こう側へ。光のブルームで越える",    "zoom in", S(.5,.5,1.00),  S(.5,.5,1.06),  1.0, None, dict(tag="R6", bloom=True)),
+    ("p068_069_first_sight",150.00, 154.00, "LAST SECTION","もう手を離さないよ=到着。声だけだった大きなうさぎ(答えは言わない)", "pan →",   S(.36,.5,1.03), S(.60,.5,1.03), 0.8, None, dict(tag="R6b")),
+    ("p070_071_oyabun",     154.00, 160.40, "LAST SECTION","親分へ近づく。まだ答えを言わない",          "pan →",   S(.30,.5,1.02), S(.58,.5,1.02), 0.8, None),
+    ("p086_087_home",       160.40, 167.60, "LAST SECTION","同じ空を見上げる。空と光(虹はほぼ消える)",   "zoom in", S(.5,.5,1.00),  S(.56,.5,1.05), 1.2, None),
+    # R7 「虹の向こうで／また」 168.40 / 172.20: 虹そのもの -> 虹色の光 -> 暖かな光 -> 宇宙酒場。「また」の後は虹を主役に戻さない
+    (RB,                    167.60,  170.60, "OUTRO",       "R7 最後の虹(遠く・淡く)",                  "zoom out",S(.5,.15,1.30), S(.5,.14,1.20), 0.8, "Lc", dict(tag="R7", sat=0.85)),
+    (RB,                    170.60,  172.80, "OUTRO",       "R7 虹色の光 → 暖かな光(虹の輪郭は消える)",   "zoom in", S(.5,.18,2.00), S(.5,.15,2.60), 1.2, "Lc", dict(tag="R7")),
+    ("p084_085_empty_seat", 172.80,  179.00, "END CARD",    "「またねじゃなくて」 親分と空いた席。静止",  "still",   S(.5,.5,1.00),  S(.5,.5,1.015), 2.0, None),
+    ("END_CARD",            179.00, None,   "END CARD",    "「おかえりって」 親分だけ。虹・字幕・台詞なし", "zoom in", S(.5,.58,1.00), S(.5,.58,1.02), 1.6, None),
 ]
 END_CARD_KEY = "p088_welcome"          # replaced automatically if assets/images/oyabun_bar.* exists
 
@@ -121,9 +140,10 @@ def end_card_image_key():
 
 def resolve_cuts(dur):
     cuts = []
-    for key, t0, t1, sec, theme, motion, cf, ct, fade, page in CUTS:
+    for key, t0, t1, sec, theme, motion, cf, ct, fade, page, *extra in CUTS:
         cuts.append(dict(key=key, t0=t0, t1=dur if t1 is None else t1, sec=sec, theme=theme, motion=motion,
-                         cf=cf, ct=ct, fade=fade, page=page))
+                         cf=cf, ct=ct, fade=fade, page=page, tag=(extra[0].get('tag') if extra else None),
+                         sat=(extra[0].get('sat') if extra else None), bloom=bool(extra and extra[0].get('bloom'))))
     return cuts
 
 
@@ -135,7 +155,10 @@ def img_path(key):
 
 # --- stills ----------------------------------------------------------------------------------------
 class Still:
-    """One source image. frame() = full-bleed 16:9 window; page_frame() = a single book page on a blurred backdrop."""
+    """One source image.
+    page=None : full-bleed 16:9 window over the whole image.
+    page="L"/"R": a single book page shown whole on a blurred backdrop (page_frame).
+    page="Lc"/"Rc": full-bleed 16:9 window limited to one page (cam = cx, cy, zoom relative to that page)."""
     def __init__(self, key, page=None):
         self.im = Image.open(img_path(key)).convert("RGB")
         w, h = self.im.size
@@ -146,12 +169,14 @@ class Still:
         self.page = page
         if page:
             half = w // 2
-            box = (0, 0, half - GUTTER, h) if page == "L" else (half + GUTTER, 0, w, h)
+            side = page[0]
+            box = (0, 0, half - GUTTER, h) if side == "L" else (half + GUTTER, 0, w, h)
             self.pg = self.im.crop(box)
-            bg = self.pg.resize((W, int(self.pg.height * W / self.pg.width)), Image.BICUBIC)
-            y0 = (bg.height - H) // 2
-            bg = bg.crop((0, y0, W, y0 + H)).filter(ImageFilter.GaussianBlur(48))
-            self.bg = Image.eval(bg, lambda v: int(v * 0.55))
+            if len(page) == 1:
+                bg = self.pg.resize((W, int(self.pg.height * W / self.pg.width)), Image.BICUBIC)
+                y0 = (bg.height - H) // 2
+                bg = bg.crop((0, y0, W, y0 + H)).filter(ImageFilter.GaussianBlur(48))
+                self.bg = Image.eval(bg, lambda v: int(v * 0.55))
 
     def frame(self, cam):
         cx, cy, z = cam
@@ -160,6 +185,15 @@ class Still:
         x0 = min(max(cx * w - bw / 2, 0), w - bw)
         y0 = min(max(cy * h - bh / 2, 0), h - bh)
         return self.im.transform((W, H), Image.EXTENT, (x0, y0, x0 + bw, y0 + bh), Image.BICUBIC)
+
+    def crop_frame(self, cam):
+        cx, cy, z = cam
+        pw, ph = self.pg.size
+        bw = pw / z
+        bh = bw * 9 / 16
+        x0 = min(max(cx * pw - bw / 2, 0), pw - bw)
+        y0 = min(max(cy * ph - bh / 2, 0), ph - bh)
+        return self.pg.transform((W, H), Image.EXTENT, (x0, y0, x0 + bw, y0 + bh), Image.BICUBIC)
 
     def page_frame(self, cam):
         z = cam[2]
@@ -299,7 +333,7 @@ class Renderer:
     def __init__(self, dur, fps=30):
         self.dur, self.fps = dur, fps
         self.cuts = resolve_cuts(dur)
-        self.end_card_start = self.cuts[-1]["t0"]
+        self.end_card_start = next(c["t0"] for c in self.cuts if c["sec"] == "END CARD")
         self.stills = {}
         self.qr = sorted(glob.glob(QR_GLOB))
         self.qr_img = None
@@ -310,10 +344,10 @@ class Renderer:
             plate = Image.new("RGB", (size + margin * 2, size + margin * 2), (255, 255, 255))
             plate.paste(qr, (margin, margin))
             self.qr_img = plate
-        self.captions = build_captions(dur)
+        self.captions = build_captions(dur) if SHOW_LYRICS else []
         self.title = dict(id="title", lines=[dict(text="虹の向こうで会いたい — 続編", start=2.0, end=6.0, show=2.0, conf="n/a")], t_in=2.0, t_out=6.4)
         self.layouts = []
-        for cap in self.captions + [self.title]:
+        for cap in self.captions + ([self.title] if SHOW_TITLE else []):
             anchor = "C" if cap["id"] == "title" else choose_anchor(cap, self.cuts, forced={"outro1": "L", "outro2": "L"}.get(cap["id"]))
             cap["anchor"] = anchor
             self.layouts.append((cap, layout_caption(cap, anchor)))
@@ -328,7 +362,13 @@ class Renderer:
         u = (t - cut["t0"]) / max(cut["t1"] - cut["t0"], 1e-6)
         cam = lerp_cam(cut["cf"], cut["ct"], min(max(u, 0), 1))
         st = self.still(cut)
-        return st.page_frame(cam) if cut["page"] else st.frame(cam)
+        if cut["page"] and len(cut["page"]) == 2:
+            fr = st.crop_frame(cam)
+        else:
+            fr = st.page_frame(cam) if cut["page"] else st.frame(cam)
+        if cut.get("sat"):
+            fr = ImageEnhance.Color(fr).enhance(cut["sat"])
+        return fr
 
     def base_frame(self, t):
         cuts = self.cuts
@@ -339,6 +379,9 @@ class Renderer:
             u = (t - (c["t0"] - c["fade"] / 2)) / c["fade"]
             if u < 1:
                 fr = Image.blend(self.cut_frame(cuts[idx - 1], t), fr, smoothstep(u))
+                if c.get("bloom"):      # R6: cross the boundary through a wash of warm light instead of a plain dissolve
+                    import math
+                    fr = Image.blend(fr, Image.new("RGB", (W, H), (255, 232, 190)), 0.62 * math.sin(math.pi * max(0.0, min(1.0, u))) ** 2)
         return fr
 
     def text_items(self, t):
@@ -397,20 +440,45 @@ class Renderer:
         return (fr, info) if return_info else fr
 
 
+def rainbow_table(cuts):
+    """Which cut is on screen while each rainbow lyric is sung (sync reference; positions are estimates)."""
+    must = ("虹の向こうで会いたい", "空にかかった虹が", "虹の向こうで会えたなら")
+    rows = []
+    try:
+        for r in load_lyrics():
+            if "虹" not in r["text"]:
+                continue
+            c = next((c for c in cuts if c["t0"] <= r["start"] + 0.3 < c["t1"]), cuts[-1])
+            c_end = next((c for c in cuts if c["t0"] <= r["end"] - 0.1 < c["t1"]), cuts[-1])
+            need = r["text"] in must
+            tag = c.get("tag") or ""
+            ok = ("OK" if tag else "要確認") if need else "-"
+            vis = c["key"] + (f"[{c['page']}]" if c["page"] else "")
+            if c_end is not c:
+                vis += " → " + c_end["key"] + (f"[{c_end['page']}]" if c_end["page"] else "")
+            rows.append(f"| {ts(r['start'])}-{ts(r['end'])} | {r['text']} | {vis} | {tag or '-'} | {ok} |")
+    except FileNotFoundError:
+        pass
+    return ["", "## 虹の歌唱位置と映像(歌唱位置は推定)", "",
+            "| sung | lyric | cut on screen | rainbow beat | 虹の存在 |", "|---|---|---|---|---|"] + rows
+
+
 def write_timeline(cuts, caps, qr_path, dur, endkey):
     p = os.path.join(ROOT, "work/storyboard/timeline.md")
     os.makedirs(os.path.dirname(p), exist_ok=True)
     L = ["# timeline (auto-generated by scripts/build_mv.py)", "",
-         f"audio: assets/audio/song.m4a ({ts(dur)}) / 約86BPM (小節=2.79s, 1拍目=0.49s) / 歌詞: assets/lyrics/虹の向こうで会いたい_歌詞.txt (同期は推定。lyrics_timing.tsv 参照)", "",
+         f"audio: assets/audio/song.m4a ({ts(dur)}) / 約86BPM (小節=2.79s, 1拍目=0.49s) / 歌詞は映像に表示しない(v3)。同期資料: lyrics_timing.tsv (推定)", "",
          "| start | end | section | lyric/theme | visual | motion | transition | source |",
          "|---|---|---|---|---|---|---|---|"]
     for c in cuts:
         tr = "fade in" if c["fade"] == 0 else f"dissolve {c['fade']:.1f}s"
         key = endkey if c["key"] == "END_CARD" else c["key"]
-        vis = key + (f" [{c['page']}頁]" if c["page"] else "")
+        vis = key + ((f" [{c['page'][0]}頁クロップ]" if len(c["page"]) == 2 else f" [{c['page']}頁]") if c["page"] else "") + (f" **{c['tag']}**" if c.get("tag") else "")
         src = os.path.relpath(img_path(c["key"]), ROOT)
         L.append(f"| {ts(c['t0'])} | {ts(c['t1'])} | {c['sec']} | {c['theme']} | {vis} | {c['motion']} | {tr} | {src} |")
-    L += ["", "## lyric captions (歌唱=推定位置 / 表示=実際の表示区間)", "",
+    L += rainbow_table(cuts)
+    if caps:
+      L += ["", "## lyric captions (歌唱=推定位置 / 表示=実際の表示区間)", "",
           "| display in | display out | sung start-end | anchor | text | confidence |", "|---|---|---|---|---|---|"]
     for cap in caps:
         for ln in cap["lines"]:
@@ -426,11 +494,15 @@ def main():
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--crf", type=int, default=23)
     ap.add_argument("--timeline-only", action="store_true")
+    ap.add_argument("--lyrics", action="store_true", help="draw the lyric telop (off by default since v3)")
+    ap.add_argument("--title", action="store_true", help="draw the intro title (off by default since v3)")
     ap.add_argument("--limit", type=float, default=None)
     ap.add_argument("--frames", default=None, help="comma-separated seconds: write PNG stills instead of a video")
     ap.add_argument("--frames-dir", default=os.path.join(ROOT, "work/temp/qa"))
     a = ap.parse_args()
 
+    global SHOW_LYRICS, SHOW_TITLE
+    SHOW_LYRICS, SHOW_TITLE = a.lyrics, a.title
     dur = audio_duration()
     r = Renderer(dur, a.fps)
     qr_path = r.qr[0] if r.qr else None

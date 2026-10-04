@@ -17,7 +17,7 @@ preview v1 を観て確定する前の**候補**。確定したものだけ残�
 - カメラ: ゆっくり左→右のパン。
 - prompt: "Anime-style cozy space tavern counter. The large rabbit boss rests his chin on his paw; only his eyes and ears move slightly as he looks toward the girl. Steam rises from the cup, lanterns flicker, stars outside the window twinkle. Slow pan left to right. Preserve both characters' faces and costumes exactly. No text."
 
-## 3. 宇宙酒場への到着 — 2:52.5〜2:57 (エンドカード頭、4〜5秒)
+## 3. 宇宙酒場への到着 — 2:52.8〜2:57 (エンドカード頭、4〜5秒。「またねじゃなくて」の親分と空いた席)
 - 元画像: `p088_welcome` (星空と天の川、親分アップ、湯気の立つ湯呑み)
 - 動かす対象: 湯気、窓の外の星のまたたき、天の川の微かな流れ、ランタンの灯り。
 - 動かしてはいけない対象: 親分の顔・鉢巻・着物・首飾り、手前の椅子。画面下側はQRと文字を載せるので大きな動きなし。
@@ -26,3 +26,18 @@ preview v1 を観て確定する前の**候補**。確定したものだけ残�
 
 ## 備考
 - 秒数はpreview v1のtimeline.md準拠。`scripts/build_mv.py` の CUTS で `p0xx` を動画ファイルに差し替える改修は第2版で行う(Skillはまだ改造しない)。
+
+## 4. 虹の向こうへ届く瞬間(R6) — 2:26.8〜2:30.0 (使用3〜4秒) / 第一候補
+- 対応する歌声: 「虹の向こうで会えたなら」(推定 2:27.5〜2:31.5)。虹の物語の最大の転換点。「虹を見る側」→「虹の向こう側」。
+- 第一候補(ユーザー指定): **カメラがゆっくり虹／光の境界を越え、暖かな世界へ入っていく。** 派手なファンタジー映像にしない。
+- 元画像: 新規静止画 RAINBOW_04(`image_requests.md`)が来た場合はそれ。無ければ `p066_067_come_in`(扉の向こうの暖かな光)。
+- 動かす対象: 淡い虹の光が背後へ流れて消え、前方の暖かな光が画面いっぱいに広がる。髪と光の粒がわずかに揺れる。扉がもう少しだけ開く。
+- 動かしてはいけない対象: 女の子の顔の向き・服・髪飾り・バッグ。虹を主役にしない。説明的な動き(振り返る・誰かが現れる)は不可。
+- カメラ: 固定の位置からごくゆっくりのdolly in。境界(光のにじみ)を通り抜ける。
+- prompt: "Anime-style, a girl seen from behind at a glowing wooden door in a lantern-lit alley. The camera glides slowly forward through a faint boundary of rainbow-tinted light into a warm golden world; the rainbow glow drifts behind and fades, warm light widens. Hair and light particles move slightly. No face shown, no new characters, no text. Not flashy fantasy."
+- 備考: v3bの試写では静止画+光のブルーム遷移で成立する見込み。静止の余韻を優先し、AI動画は必要が確認できたときだけ。
+
+## 更新メモ(v3b)
+- 歌詞テロップ・タイトルを外したため、「歌声 × 映像」で意味が伝わるかが基準。扉(1)・視線(2)・宇宙酒場(3)・虹の向こうへ届く(4)は、いずれも**静止のままの試写で足りないと分かった場合のみ**発注する。
+- 時間はv3bのタイムラインに合わせた(扉 2:22 / 視線 2:34 / 宇宙酒場(おかえりって) 2:59 / 届く瞬間 2:26.8)。
+- 「おかえりって」(2:59〜)はカメラをほぼ動かさず、親分と虹なし・文字なしで着地させる。
