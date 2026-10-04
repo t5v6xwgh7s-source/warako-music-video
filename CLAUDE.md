@@ -37,6 +37,14 @@
 - 虹の絵が足りないときは、既存の絵に虹を合成せず、`work/generated/image_requests.md` に必要な構図を記録する(勝手に生成しない)。
 - AI動画は必要な場所だけ(`work/generated/video_requests.md`)。まだ生成しない。静止画であること自体を余韻として使う。
 
+## 基準版と固定ポイント(2026-10-04。現在のpreviewを最終確認候補として保持)
+
+- 基準版は `output/final/baseline_v3b/`(読み取り専用)。詳細は `work/storyboard/baseline_v3b.md`。**上書きしない**。新しい版は別名で保存する。
+- QRは**曲終了後の独立カード**に置く(本編中には出さない)。説明文・CTA・タイトルは付けない(作品終了後の静かな入口)。リンク先は `https://ichingeki.warako39stars.com/oyabun_readable.html`。
+- 次の3地点は**人間の視聴確認が終わるまで、自動解析を理由にタイミングを変更しない**: R6 2:27.5「虹の向こうで会えたなら」/ R7 2:48.4「虹の向こうで／また」/ END 2:59〜「またねじゃなくて／おかえりって」(手を差し伸べる親分)。記録は `work/storyboard/listening_checkpoints.md`。
+- 変更の前後で `python3 scripts/check_baseline.py` を実行する。それ以外の構成・虹キューR1〜R5・QR実装は保持する。
+- 高解像度の宇宙酒場原画は `assets/images/oyabun_bar_hires.*`(2:3の縦長)として置けば、現在の構図・クロップのまま差し替わる。
+
 ## 基本方針
 
 完成物を作ることを優先する。

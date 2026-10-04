@@ -80,6 +80,12 @@ def onset_peaks():
 
 
 def main():
+    import sys
+    if os.path.exists(OUT) and "--force" not in sys.argv:
+        head = open(OUT, encoding="utf8").read(2000)
+        if "# LOCK" in head:
+            sys.exit("lyrics_timing.tsv is LOCKED (baseline v3b: R6 / R7 / END are frozen until a human listening check). "
+                     "Edit the TSV by hand, or run with --force to regenerate.")
     lines = [l.strip() for l in open(LYRICS, encoding="utf8") if l.strip()]
     assert len(lines) == 43, len(lines)
     peaks = onset_peaks()

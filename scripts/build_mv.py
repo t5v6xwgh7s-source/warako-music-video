@@ -134,15 +134,28 @@ def ease(u):
     return u * u * (3 - 2 * u)
 
 
+END_CARD_ASPECT = 900 / 1350      # the preview picture (portrait 2:3). A higher-resolution original keeps the same crop if it has this aspect.
+
+
 def end_card_image_key():
-    for p in sorted(glob.glob(os.path.join(IMG, "oyabun_bar.*"))):
-        return os.path.splitext(os.path.basename(p))[0], p
+    """Order: oyabun_bar_hires.* (a high-resolution original, if provided) > oyabun_bar.* (current) > the book's last spread.
+    The crop (cx/cy/zoom as fractions of the picture) is unchanged, so a same-aspect original drops in with the same composition."""
+    for pat in ("oyabun_bar_hires.*", "oyabun_bar.*"):
+        for p in sorted(glob.glob(os.path.join(IMG, pat))):
+            try:
+                w, h = Image.open(p).size
+                if abs(w / h - END_CARD_ASPECT) > 0.01:
+                    print(f"WARNING: {os.path.basename(p)} is {w}x{h} (aspect {w/h:.3f}); the baseline crop assumes 2:3 ({END_CARD_ASPECT:.3f}) - "
+                          "the framing will differ. Re-check the end card by eye.", file=sys.stderr)
+            except Exception:
+                pass
+            return os.path.splitext(os.path.basename(p))[0], p
     return END_CARD_KEY, os.path.join(IMG, f"art_{END_CARD_KEY}_png.jpg")
 
 
 def resolve_cuts(dur):
     cuts = []
-    custom_end = bool(glob.glob(os.path.join(IMG, "oyabun_bar.*")))
+    custom_end = end_card_image_key()[0].startswith("oyabun_bar")
     for key, t0, t1, sec, theme, motion, cf, ct, fade, page, *extra in CUTS:
         if key == "END_CARD" and custom_end:     # portrait 宇宙酒場 picture: frame the boss's face, hand and the bottle (16:9 window)
             cf, ct = S(.5, .35, 1.00), S(.5, .35, 1.03)
@@ -599,6 +612,8 @@ def main():
             r.frame_at(t).save(os.path.join(a.frames_dir, f"t{t:07.2f}.png"))
         return
 
+    if os.path.exists(a.out) and os.path.abspath(a.out).startswith(os.path.join(ROOT, "output/final") + os.sep):
+        sys.exit(f"refusing to overwrite {a.out}: output/final holds frozen baselines. Write to output/preview/ (or another name).")
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     full = dur + r.tail
     total = int(round((a.limit or full) * a.fps))
