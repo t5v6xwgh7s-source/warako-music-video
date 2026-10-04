@@ -1,0 +1,56 @@
+{
+ "name": "baseline_v3b",
+ "created": "2026-10-04 02:16:33 UTC",
+ "note": "baseline v3b: lyric-less, rainbow cues R1-R7, QR card after the song",
+ "git_commit": "1a492d87b613c5bf4af80686d79bc8eda694f6aa",
+ "git_dirty": true,
+ "build_cmd": "python3 scripts/build_mv.py",
+ "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+ "python": "3.11.15",
+ "videos": [
+  {
+   "path": "output/final/baseline_v3b/mv_v3b_baseline_1080p.mp4",
+   "sha256": "05e935002a4eafd0c93140749138d9c8480f6e9db412bd08e0e094fa3cf9c8b3",
+   "bytes": 62975705,
+   "duration": 197.166667
+  },
+  {
+   "path": "output/final/baseline_v3b/mv_v3b_baseline_720p.mp4",
+   "sha256": "e7f915c8751969ee8b20df3b51d99228a43e8ce3963e3ca5bb2641725546d461",
+   "bytes": 26462576,
+   "duration": 197.166667
+  }
+ ],
+ "frozen": {
+  "R6": 147.54,
+  "R7": 168.4,
+  "END": 179.0
+ },
+ "timeline_copies": [
+  "work/storyboard/baselines/baseline_v3b/timeline.md",
+  "work/storyboard/baselines/baseline_v3b/rainbow_cues.md",
+  "work/storyboard/baselines/baseline_v3b/baseline_v3b.json"
+ ],
+ "assets": [
+  {
+   "path": "assets/audio/song.m4a",
+   "sha256": "48c51ae2fed2d55aca4d7a81124897ce92793e3c8e0ddd71e4e9e54528f66967",
+   "bytes": 3124962
+  },
+  {
+   "path": "assets/qr/qr.png",
+   "sha256": "8f43f232d64f7534a89b523fcb72221268444c2a7ae4583dbd35a6bd2bba3aa6",
+   "bytes": 11416
+  },
+  {
+   "path": "assets/images/oyabun_bar.jpg",
+   "sha256": "ca9a42b10a0a3047b85f922bc125dfd2026b82578bab3cbcbe4da47d8ba6d883",
+   "bytes": 324237
+  },
+  {
+   "path": "work/storyboard/lyrics_timing.tsv",
+   "sha256": "0cd3d5c1985ff4e2486407b353505a42840023b11acbf69100ebd5c1275dab1e",
+   "bytes": 2544
+  }
+ ]
+}

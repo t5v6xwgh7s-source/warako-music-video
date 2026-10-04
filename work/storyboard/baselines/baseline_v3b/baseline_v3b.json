@@ -1,0 +1,1021 @@
+{
+ "duration": 184.16,
+ "qr_mode": "after",
+ "qr_tail": 13.0,
+ "cuts": [
+  {
+   "key": "p001_title",
+   "page": null,
+   "t0": 0.0,
+   "t1": 5.5,
+   "fade": 0.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.66,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.66,
+    1.07
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p002_003_warmth",
+   "page": null,
+   "t0": 5.5,
+   "t1": 12.0,
+   "fade": 1.6,
+   "tag": null,
+   "cf": [
+    0.3,
+    0.5,
+    1.02
+   ],
+   "ct": [
+    0.42,
+    0.5,
+    1.06
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p004_005_snow",
+   "page": "L",
+   "t0": 12.0,
+   "t1": 15.3,
+   "fade": 1.2,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.02
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p004_005_snow",
+   "page": "R",
+   "t0": 15.3,
+   "t1": 18.1,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.05
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p030_031_farewell",
+   "page": "Lc",
+   "t0": 18.1,
+   "t1": 23.2,
+   "fade": 0.9,
+   "tag": "R1",
+   "cf": [
+    0.5,
+    0.12,
+    1.34
+   ],
+   "ct": [
+    0.5,
+    0.12,
+    1.26
+   ],
+   "sat": 0.8,
+   "bloom": false
+  },
+  {
+   "key": "p006_007_stop_waiting",
+   "page": null,
+   "t0": 23.2,
+   "t1": 26.0,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.46,
+    0.5,
+    1.09
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p008_009_found",
+   "page": null,
+   "t0": 26.0,
+   "t1": 31.0,
+   "fade": 1.2,
+   "tag": null,
+   "cf": [
+    0.32,
+    0.5,
+    1.04
+   ],
+   "ct": [
+    0.62,
+    0.5,
+    1.04
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p010_011_distance",
+   "page": null,
+   "t0": 31.0,
+   "t1": 33.7,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.62,
+    0.5,
+    1.03
+   ],
+   "ct": [
+    0.48,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p030_031_farewell",
+   "page": "Lc",
+   "t0": 33.7,
+   "t1": 36.9,
+   "fade": 0.3,
+   "tag": "R2",
+   "cf": [
+    0.5,
+    0.15,
+    1.42
+   ],
+   "ct": [
+    0.5,
+    0.17,
+    1.5
+   ],
+   "sat": 1.12,
+   "bloom": false
+  },
+  {
+   "key": "p030_031_farewell",
+   "page": "L",
+   "t0": 36.9,
+   "t1": 38.6,
+   "fade": 0.9,
+   "tag": "R2",
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.05
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p012_013_every_day",
+   "page": "L",
+   "t0": 38.6,
+   "t1": 41.3,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.015
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p012_013_every_day",
+   "page": "R",
+   "t0": 41.3,
+   "t1": 44.0,
+   "fade": 0.9,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.015
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p016_017_safe",
+   "page": null,
+   "t0": 44.0,
+   "t1": 48.0,
+   "fade": 0.9,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.56,
+    0.53,
+    1.07
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p030_031_farewell",
+   "page": "Lc",
+   "t0": 48.0,
+   "t1": 52.0,
+   "fade": 0.5,
+   "tag": "R3",
+   "cf": [
+    0.3,
+    0.15,
+    1.45
+   ],
+   "ct": [
+    0.64,
+    0.17,
+    1.45
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p014_015_first_step",
+   "page": null,
+   "t0": 52.0,
+   "t1": 56.0,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.34,
+    0.5,
+    1.02
+   ],
+   "ct": [
+    0.6,
+    0.5,
+    1.02
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p018_019_seasons",
+   "page": null,
+   "t0": 56.0,
+   "t1": 63.0,
+   "fade": 2.0,
+   "tag": null,
+   "cf": [
+    0.26,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.74,
+    0.5,
+    1.0
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p020_021_farewell",
+   "page": null,
+   "t0": 63.0,
+   "t1": 70.0,
+   "fade": 1.8,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.02
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p022_023_new_friend",
+   "page": null,
+   "t0": 70.0,
+   "t1": 75.4,
+   "fade": 1.2,
+   "tag": null,
+   "cf": [
+    0.55,
+    0.5,
+    1.1
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p030_031_farewell",
+   "page": "Lc",
+   "t0": 75.4,
+   "t1": 81.4,
+   "fade": 0.3,
+   "tag": "R4",
+   "cf": [
+    0.5,
+    0.3,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.335,
+    1.02
+   ],
+   "sat": 1.05,
+   "bloom": false
+  },
+  {
+   "key": "p024_025_meals_naps",
+   "page": "L",
+   "t0": 81.4,
+   "t1": 83.4,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p024_025_meals_naps",
+   "page": "R",
+   "t0": 83.4,
+   "t1": 85.3,
+   "fade": 0.8,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p026_027_seasons",
+   "page": null,
+   "t0": 85.3,
+   "t1": 88.1,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p030_031_farewell",
+   "page": "Lc",
+   "t0": 88.1,
+   "t1": 92.25,
+   "fade": 0.5,
+   "tag": "R5",
+   "cf": [
+    0.5,
+    0.17,
+    1.5
+   ],
+   "ct": [
+    0.5,
+    0.185,
+    2.0
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p028_029_love",
+   "page": "L",
+   "t0": 92.25,
+   "t1": 95.1,
+   "fade": 0.8,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.04
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p028_029_love",
+   "page": "R",
+   "t0": 95.1,
+   "t1": 98.0,
+   "fade": 0.7,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.04
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p030_031_farewell",
+   "page": "R",
+   "t0": 98.0,
+   "t1": 104.75,
+   "fade": 1.2,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.02
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p032_033_quiet_room",
+   "page": "L",
+   "t0": 104.75,
+   "t1": 107.9,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.04
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p032_033_quiet_room",
+   "page": "R",
+   "t0": 107.9,
+   "t1": 111.0,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.04
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p034_035_figurine_found",
+   "page": "L",
+   "t0": 111.0,
+   "t1": 113.7,
+   "fade": 0.8,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p034_035_figurine_found",
+   "page": "R",
+   "t0": 113.7,
+   "t1": 116.5,
+   "fade": 0.8,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p036_037_figurine_home",
+   "page": "L",
+   "t0": 116.5,
+   "t1": 119.0,
+   "fade": 0.8,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p036_037_figurine_home",
+   "page": "R",
+   "t0": 119.0,
+   "t1": 121.5,
+   "fade": 0.8,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p038_039_not_a_replacement",
+   "page": "L",
+   "t0": 121.5,
+   "t1": 124.4,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.02
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p038_039_not_a_replacement",
+   "page": "R",
+   "t0": 124.4,
+   "t1": 127.25,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.02
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p040_041_shadow",
+   "page": "L",
+   "t0": 127.25,
+   "t1": 129.9,
+   "fade": 1.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.05
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p040_041_shadow",
+   "page": "R",
+   "t0": 129.9,
+   "t1": 131.5,
+   "fade": 0.7,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.02
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p042_043_lost",
+   "page": "L",
+   "t0": 131.5,
+   "t1": 133.2,
+   "fade": 0.7,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.02
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p042_043_lost",
+   "page": "R",
+   "t0": 133.2,
+   "t1": 135.0,
+   "fade": 0.6,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p044_045_voice",
+   "page": null,
+   "t0": 135.0,
+   "t1": 138.5,
+   "fade": 0.7,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.08
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p060_061_light",
+   "page": null,
+   "t0": 138.5,
+   "t1": 142.0,
+   "fade": 0.7,
+   "tag": null,
+   "cf": [
+    0.34,
+    0.5,
+    1.03
+   ],
+   "ct": [
+    0.62,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p064_065_door",
+   "page": null,
+   "t0": 142.0,
+   "t1": 146.8,
+   "fade": 0.6,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p066_067_come_in",
+   "page": null,
+   "t0": 146.8,
+   "t1": 150.0,
+   "fade": 1.0,
+   "tag": "R6",
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.06
+   ],
+   "sat": null,
+   "bloom": true
+  },
+  {
+   "key": "p068_069_first_sight",
+   "page": null,
+   "t0": 150.0,
+   "t1": 154.0,
+   "fade": 0.8,
+   "tag": "R6b",
+   "cf": [
+    0.36,
+    0.5,
+    1.03
+   ],
+   "ct": [
+    0.6,
+    0.5,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p070_071_oyabun",
+   "page": null,
+   "t0": 154.0,
+   "t1": 160.4,
+   "fade": 0.8,
+   "tag": null,
+   "cf": [
+    0.3,
+    0.5,
+    1.02
+   ],
+   "ct": [
+    0.58,
+    0.5,
+    1.02
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p086_087_home",
+   "page": null,
+   "t0": 160.4,
+   "t1": 167.6,
+   "fade": 1.2,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.56,
+    0.5,
+    1.05
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p030_031_farewell",
+   "page": "Lc",
+   "t0": 167.6,
+   "t1": 170.6,
+   "fade": 0.8,
+   "tag": "R7",
+   "cf": [
+    0.5,
+    0.15,
+    1.3
+   ],
+   "ct": [
+    0.5,
+    0.14,
+    1.2
+   ],
+   "sat": 0.85,
+   "bloom": false
+  },
+  {
+   "key": "p030_031_farewell",
+   "page": "Lc",
+   "t0": 170.6,
+   "t1": 172.8,
+   "fade": 1.2,
+   "tag": "R7",
+   "cf": [
+    0.5,
+    0.18,
+    2.0
+   ],
+   "ct": [
+    0.5,
+    0.15,
+    2.6
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "p084_085_empty_seat",
+   "page": null,
+   "t0": 172.8,
+   "t1": 179.0,
+   "fade": 2.0,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.5,
+    1.015
+   ],
+   "sat": null,
+   "bloom": false
+  },
+  {
+   "key": "END_CARD",
+   "page": null,
+   "t0": 179.0,
+   "t1": 184.16,
+   "fade": 1.6,
+   "tag": null,
+   "cf": [
+    0.5,
+    0.35,
+    1.0
+   ],
+   "ct": [
+    0.5,
+    0.35,
+    1.03
+   ],
+   "sat": null,
+   "bloom": false
+  }
+ ],
+ "frozen_lines": [
+  {
+   "text": "虹の向こうで会えたなら",
+   "nth": 0,
+   "start": 147.54,
+   "end": 151.14
+  },
+  {
+   "text": "虹の向こうで",
+   "nth": 3,
+   "start": 168.4,
+   "end": 170.6
+  },
+  {
+   "text": "また",
+   "nth": 0,
+   "start": 172.2,
+   "end": 173.3
+  },
+  {
+   "text": "またねじゃなくて",
+   "nth": 0,
+   "start": 173.9,
+   "end": 177.4
+  },
+  {
+   "text": "おかえりって",
+   "nth": 0,
+   "start": 179.1,
+   "end": 182.9
+  }
+ ],
+ "lyrics_sha256": "63a899f416c7423d1be09417f9a9d6885edf71f69371fdc5d6fefcf1c3ea4553",
+ "end_card_image": "oyabun_bar.jpg"
+}

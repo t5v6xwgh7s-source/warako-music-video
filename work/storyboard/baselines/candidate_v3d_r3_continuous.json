@@ -1,0 +1,56 @@
+{
+ "name": "candidate_v3d_r3_continuous",
+ "created": "2026-10-04 02:16:34 UTC",
+ "note": "adoption candidate: v3d_r3_continuous (R3+R3b one continuous rainbow shot 0:48-0:53.7, soft dissolve into p014)",
+ "git_commit": "1a492d87b613c5bf4af80686d79bc8eda694f6aa",
+ "git_dirty": true,
+ "build_cmd": "python3 scripts/build_mv.py --variant v3d_r3_continuous",
+ "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+ "python": "3.11.15",
+ "videos": [
+  {
+   "path": "output/final/candidate_v3d_r3_continuous/candidate_v3d_r3_continuous_full.mp4",
+   "sha256": "697cd2b6a854c386a937339d4dcc0cf36504fed66bdc30637d3eff6d4992cfa5",
+   "bytes": 62920041,
+   "duration": 197.166667
+  },
+  {
+   "path": "output/final/candidate_v3d_r3_continuous/candidate_v3d_r3_continuous_proxy.mp4",
+   "sha256": "2f583f76b1ad0488781861c44367750d1e41a557c5f66c3eb2eec3d5c37e2615",
+   "bytes": 26467189,
+   "duration": 197.166667
+  }
+ ],
+ "frozen": {
+  "R6": 147.54,
+  "R7": 168.4,
+  "END": 179.0
+ },
+ "timeline_copies": [
+  "work/storyboard/baselines/candidate_v3d_r3_continuous/timeline.md",
+  "work/storyboard/baselines/candidate_v3d_r3_continuous/rainbow_cues.md",
+  "work/storyboard/baselines/candidate_v3d_r3_continuous/diff_vs_baseline.md"
+ ],
+ "assets": [
+  {
+   "path": "assets/audio/song.m4a",
+   "sha256": "48c51ae2fed2d55aca4d7a81124897ce92793e3c8e0ddd71e4e9e54528f66967",
+   "bytes": 3124962
+  },
+  {
+   "path": "assets/qr/qr.png",
+   "sha256": "8f43f232d64f7534a89b523fcb72221268444c2a7ae4583dbd35a6bd2bba3aa6",
+   "bytes": 11416
+  },
+  {
+   "path": "assets/images/oyabun_bar.jpg",
+   "sha256": "ca9a42b10a0a3047b85f922bc125dfd2026b82578bab3cbcbe4da47d8ba6d883",
+   "bytes": 324237
+  },
+  {
+   "path": "work/storyboard/lyrics_timing.tsv",
+   "sha256": "0cd3d5c1985ff4e2486407b353505a42840023b11acbf69100ebd5c1275dab1e",
+   "bytes": 2544
+  }
+ ]
+}
