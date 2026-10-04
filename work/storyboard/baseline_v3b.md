@@ -14,7 +14,7 @@
 | 基準のスナップショット | `work/storyboard/baseline_v3b.json` | カット表・固定行・QR設定 |
 | 固定チェック | `scripts/check_baseline.py` | R6/R7/ENDが変わると失敗する |
 | 視聴確認ポイント | `work/storyboard/listening_checkpoints.md` | 3地点と記入欄 |
-| コードの基準 | git タグ `baseline-v3b-2026-10-04` | `build_mv.py` の状態 |
+| コードの基準 | git コミット `2693956`(main)。同じ位置にローカルタグ `baseline-v3b-2026-10-04` を付けたが、**この環境ではタグをGitHubへpushできなかった**(接続エラー)ため、リモートにはコミット番号で残す | `build_mv.py` の状態 |
 
 `output/` はGit管理外(大きなメディア)。このコンテナは使い捨てなので、**基準版のmp4は、ダウンロードして手元にも保存してください。**
 コード(タグ)から `python3 scripts/build_mv.py` で、同じ映像を再生成できる(素材: `assets/audio/song.m4a`、`assets/images/*`、`assets/qr/qr.png` が必要)。
