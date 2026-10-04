@@ -23,6 +23,8 @@ FONT = os.path.join(ROOT, "assets/fonts/ZenMaruGothic-Medium.ttf")   # soft roun
 LYRICS_TSV = os.path.join(ROOT, "work/storyboard/lyrics_timing.tsv")
 QR_GLOB = os.path.join(ROOT, "assets/qr/*.png")
 QR_MIN_SECONDS = 10.0
+QR_MODE = "after"      # "after": a QR card after the song ends (audio padded with silence); "overlay": QR over the end card
+QR_TAIL = 13.0          # seconds of QR card after the song (fade-in 1.2s from black, fully opaque ~10.2s, fade-out 1.0s)
 FADE_IN, FADE_OUT = 1.2, 1.2
 SHOW_LYRICS = False     # v3 direction: no lyric telop, no title. lyrics_timing.tsv is kept as sync reference (enable with --lyrics)
 SHOW_TITLE = False
@@ -140,7 +142,10 @@ def end_card_image_key():
 
 def resolve_cuts(dur):
     cuts = []
+    custom_end = bool(glob.glob(os.path.join(IMG, "oyabun_bar.*")))
     for key, t0, t1, sec, theme, motion, cf, ct, fade, page, *extra in CUTS:
+        if key == "END_CARD" and custom_end:     # portrait 宇宙酒場 picture: frame the boss's face, hand and the bottle (16:9 window)
+            cf, ct = S(.5, .35, 1.00), S(.5, .35, 1.03)
         cuts.append(dict(key=key, t0=t0, t1=dur if t1 is None else t1, sec=sec, theme=theme, motion=motion,
                          cf=cf, ct=ct, fade=fade, page=page, tag=(extra[0].get('tag') if extra else None),
                          sat=(extra[0].get('sat') if extra else None), bloom=bool(extra and extra[0].get('bloom'))))
@@ -154,6 +159,62 @@ def img_path(key):
 
 
 # --- stills ----------------------------------------------------------------------------------------
+def load_qr_plate():
+    """Clean, un-rotated, opaque QR on a white plate with a 4-module quiet zone.
+    The picture is cropped to the dark modules, the module grid is re-sampled at module centres and re-drawn crisp
+    (same modules, no recolouring). Verified by decoding; falls back to a plain resize if the grid guess is wrong."""
+    import numpy as np
+    files = sorted(glob.glob(QR_GLOB))
+    if not files:
+        return None, None
+    src = Image.open(files[0]).convert("RGB")
+    g = np.asarray(src.convert("L"))
+    ys, xs = np.where(g < 100)
+    crop = src.crop((xs.min(), ys.min(), xs.max() + 1, ys.max() + 1))
+    cg = np.asarray(crop.convert("L")) < 128
+    row = cg[min(3, cg.shape[0] - 1)]
+    run = 0
+    for v in row:
+        if not v:
+            break
+        run += 1
+    mod = run / 7.0                                  # the finder pattern is 7 modules wide
+    n = int(round(crop.width / mod))
+    px = 12
+    plate = None
+    try:
+        cell_w, cell_h = crop.width / n, crop.height / n
+        mat = np.zeros((n, n), dtype=bool)
+        for j in range(n):
+            for i in range(n):
+                mat[j, i] = cg[int((j + .5) * cell_h), int((i + .5) * cell_w)]
+        quiet = 4
+        side = (n + 2 * quiet) * px
+        canvas = np.full((side, side), 255, dtype=np.uint8)
+        for j in range(n):
+            for i in range(n):
+                if mat[j, i]:
+                    canvas[(j + quiet) * px:(j + quiet + 1) * px, (i + quiet) * px:(i + quiet + 1) * px] = 0
+        plate = Image.fromarray(canvas).convert("RGB")
+    except Exception:
+        plate = None
+    try:
+        import cv2
+        det = cv2.QRCodeDetector()
+        want = det.detectAndDecode(cv2.cvtColor(np.asarray(src), cv2.COLOR_RGB2BGR))[0]
+        got = det.detectAndDecode(cv2.cvtColor(np.asarray(plate), cv2.COLOR_RGB2BGR))[0] if plate is not None else ""
+        if want and got != want:
+            plate = None                              # re-draw disagrees with the source -> use the plain crop instead
+    except ImportError:
+        pass
+    if plate is None:
+        side = 540
+        plate = Image.new("RGB", (side, side), (255, 255, 255))
+        sq = crop.resize((side - 120, side - 120), Image.LANCZOS)
+        plate.paste(sq, (60, 60))
+    return plate, files[0]
+
+
 class Still:
     """One source image.
     page=None : full-bleed 16:9 window over the whole image.
@@ -336,14 +397,18 @@ class Renderer:
         self.end_card_start = next(c["t0"] for c in self.cuts if c["sec"] == "END CARD")
         self.stills = {}
         self.qr = sorted(glob.glob(QR_GLOB))
-        self.qr_img = None
-        if self.qr:
-            qr = Image.open(self.qr[0]).convert("RGB")
-            size, margin = 380, 30
-            qr = qr.resize((size, size), Image.NEAREST if qr.width >= size else Image.LANCZOS)
-            plate = Image.new("RGB", (size + margin * 2, size + margin * 2), (255, 255, 255))
-            plate.paste(qr, (margin, margin))
-            self.qr_img = plate
+        self.qr_img, _ = load_qr_plate()
+        self.qr_bg = None
+        if self.qr_img is not None and QR_MODE == "after":
+            self.tail = QR_TAIL
+            ekey, epath = end_card_image_key()
+            eim = Image.open(epath).convert("RGB")
+            bg = eim.resize((W, int(eim.height * W / eim.width)), Image.BICUBIC)
+            y0 = (bg.height - H) // 2
+            bg = bg.crop((0, y0, W, y0 + H)).filter(ImageFilter.GaussianBlur(38))
+            self.qr_bg = Image.eval(bg, lambda v: int(v * 0.30))
+        else:
+            self.tail = 0.0
         self.captions = build_captions(dur) if SHOW_LYRICS else []
         self.title = dict(id="title", lines=[dict(text="虹の向こうで会いたい — 続編", start=2.0, end=6.0, show=2.0, conf="n/a")], t_in=2.0, t_out=6.4)
         self.layouts = []
@@ -400,7 +465,18 @@ class Renderer:
                     items.append((L["layer"], L["pos"], a, L["bbox"]))
         return items
 
+    def qr_card(self, t):
+        """After the song: black -> dimmed tavern backdrop + QR (un-rotated, opaque) -> black."""
+        tr = t - self.dur
+        card = self.qr_bg.copy()
+        card.paste(self.qr_img, ((W - self.qr_img.width) // 2, (H - self.qr_img.height) // 2))
+        k = smoothstep((tr - 0.4) / 1.2) * smoothstep((self.tail - tr) / 1.0)
+        return Image.blend(Image.new("RGB", (W, H)), card, k)
+
     def frame_at(self, t, with_text=True, return_info=False):
+        if self.tail and t >= self.dur:
+            fr = self.qr_card(t)
+            return (fr, []) if return_info else fr
         fr = self.base_frame(t)
         k = smoothstep(t / FADE_IN) * smoothstep((self.dur - t) / FADE_OUT)
         info = []
@@ -432,7 +508,7 @@ class Renderer:
                     fr.alpha_composite(lay, (max(pos[0], 0), max(pos[1], 0))) if pos[0] >= 0 and pos[1] >= 0 else fr.alpha_composite(lay, (0, 0), (-pos[0] if pos[0] < 0 else 0, -pos[1] if pos[1] < 0 else 0))
                 fr = fr.convert("RGB")
                 info = items
-        if self.qr_img is not None and t >= self.end_card_start + 1.5:
+        if self.qr_img is not None and QR_MODE == "overlay" and t >= self.end_card_start + 1.5:
             fr = fr.copy()
             fr.paste(self.qr_img, (W - self.qr_img.width - 110, H - self.qr_img.height - 100))
         if k < 1:
@@ -483,6 +559,10 @@ def write_timeline(cuts, caps, qr_path, dur, endkey):
     for cap in caps:
         for ln in cap["lines"]:
             L.append(f"| {ts(ln['show'])} | {ts(cap['t_out'])} | {ts(ln['start'])}-{ts(ln['end'])} | {cap.get('anchor','?')} | {ln['text']} | {ln['conf']} |")
+    if qr_path and QR_MODE == "after":
+        L += ["", "## QR card (曲が終わったあと)", "",
+              "| start | end | visual | note |", "|---|---|---|---|",
+              f"| {ts(dur)} | {ts(dur + QR_TAIL)} | 暗い宇宙酒場の背景 + QR(回転・変形なし・不透明の白い台紙) | 1.2秒で暗転から現れ、約10秒保持、1秒で暗転へ。音声は無音で延長。文言は未決定のため文字なし |"]
     L += ["", f"QR: {'`'+os.path.relpath(qr_path, ROOT)+'`' if qr_path else '**未配置 (assets/qr/*.png を置くと終盤に自動表示)**'}",
           f"end card image: `{os.path.relpath(img_path('END_CARD'), ROOT)}`"]
     open(p, "w", encoding="utf8").write("\n".join(L) + "\n")
@@ -509,7 +589,10 @@ def main():
     write_timeline(r.cuts, r.captions, qr_path, dur, end_card_image_key()[0])
     if a.timeline_only:
         return
-    assert dur - r.end_card_start >= QR_MIN_SECONDS, "end card shorter than QR minimum"
+    if QR_MODE == "overlay":
+        assert dur - r.end_card_start >= QR_MIN_SECONDS, "end card shorter than QR minimum"
+    else:
+        assert not r.tail or r.tail - 1.6 >= QR_MIN_SECONDS, "QR card shorter than the 10 s minimum"
     if a.frames:
         os.makedirs(a.frames_dir, exist_ok=True)
         for t in [float(x) for x in a.frames.split(",")]:
@@ -517,12 +600,13 @@ def main():
         return
 
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
-    total = int(round((a.limit or dur) * a.fps))
+    full = dur + r.tail
+    total = int(round((a.limit or full) * a.fps))
     ff = subprocess.Popen(
         ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(a.fps), "-i", "-",
          "-i", AUDIO, "-map", "0:v", "-map", "1:a", "-c:v", "libx264", "-preset", "medium", "-crf", str(a.crf),
-         "-pix_fmt", "yuv420p", "-r", str(a.fps), "-c:a", "aac", "-b:a", "192k",
-         "-t", f"{a.limit or dur:.3f}", "-movflags", "+faststart", a.out], stdin=subprocess.PIPE)
+         "-pix_fmt", "yuv420p", "-r", str(a.fps), "-af", "apad", "-c:a", "aac", "-b:a", "192k",
+         "-t", f"{a.limit or full:.3f}", "-movflags", "+faststart", a.out], stdin=subprocess.PIPE)
     for n in range(total):
         ff.stdin.write(r.frame_at(n / a.fps).tobytes())
         if n % 300 == 0:

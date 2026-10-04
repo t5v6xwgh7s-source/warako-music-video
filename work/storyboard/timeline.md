@@ -52,7 +52,7 @@ audio: assets/audio/song.m4a (3:04.16) / 約86BPM (小節=2.79s, 1拍目=0.49s) 
 | 2:47.60 | 2:50.60 | OUTRO | R7 最後の虹(遠く・淡く) | p030_031_farewell [L頁クロップ] **R7** | zoom out | dissolve 0.8s | assets/images/art_p030_031_farewell_png.jpg |
 | 2:50.60 | 2:52.80 | OUTRO | R7 虹色の光 → 暖かな光(虹の輪郭は消える) | p030_031_farewell [L頁クロップ] **R7** | zoom in | dissolve 1.2s | assets/images/art_p030_031_farewell_png.jpg |
 | 2:52.80 | 2:59.00 | END CARD | 「またねじゃなくて」 親分と空いた席。静止 | p084_085_empty_seat | still | dissolve 2.0s | assets/images/art_p084_085_empty_seat_png.jpg |
-| 2:59.00 | 3:04.16 | END CARD | 「おかえりって」 親分だけ。虹・字幕・台詞なし | p088_welcome | zoom in | dissolve 1.6s | assets/images/art_p088_welcome_png.jpg |
+| 2:59.00 | 3:04.16 | END CARD | 「おかえりって」 親分だけ。虹・字幕・台詞なし | oyabun_bar | zoom in | dissolve 1.6s | assets/images/oyabun_bar.jpg |
 
 ## 虹の歌唱位置と映像(歌唱位置は推定)
 
@@ -67,5 +67,11 @@ audio: assets/audio/song.m4a (3:04.16) / 約86BPM (小節=2.79s, 1拍目=0.49s) 
 | 2:27.54-2:31.14 | 虹の向こうで会えたなら | p066_067_come_in → p068_069_first_sight | R6 | OK |
 | 2:48.40-2:50.60 | 虹の向こうで | p030_031_farewell[Lc] | R7 | - |
 
-QR: **未配置 (assets/qr/*.png を置くと終盤に自動表示)**
-end card image: `assets/images/art_p088_welcome_png.jpg`
+## QR card (曲が終わったあと)
+
+| start | end | visual | note |
+|---|---|---|---|
+| 3:04.16 | 3:17.16 | 暗い宇宙酒場の背景 + QR(回転・変形なし・不透明の白い台紙) | 1.2秒で暗転から現れ、約10秒保持、1秒で暗転へ。音声は無音で延長。文言は未決定のため文字なし |
+
+QR: `assets/qr/qr.png`
+end card image: `assets/images/oyabun_bar.jpg`
