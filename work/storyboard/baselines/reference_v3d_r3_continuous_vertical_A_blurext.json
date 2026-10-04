@@ -1,0 +1,33 @@
+{
+ "name": "reference_v3d_r3_continuous_vertical_A_blurext",
+ "created": "2026-10-04 04:29:25 UTC",
+ "note": "Comparison reference only (not adopted): rainbow cuts as fitted bands on blurred extension.",
+ "git_commit": "d7fca20c87ab360d2b79dc23d564f27ad290f8dd",
+ "git_dirty": true,
+ "build_cmd": "python3 scripts/build_mv.py --variant v3d_r3_continuous --format vertical",
+ "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+ "python": "3.11.15",
+ "videos": [
+  {
+   "path": "output/final/reference_v3d_r3_continuous_vertical_A_blurext/reference_v3d_r3_continuous_vertical_A_blurext_full.mp4",
+   "sha256": "6c255d1f31b580c83c5e1d0c15e5629b052d4dc9c69bbe052248057cc172cbcb",
+   "bytes": 57468212,
+   "duration": 197.166667
+  },
+  {
+   "path": "output/final/reference_v3d_r3_continuous_vertical_A_blurext/reference_v3d_r3_continuous_vertical_A_blurext_proxy.mp4",
+   "sha256": "7a52f238f31704656d1f2842bb30455c66946f69f0e996ab479061156d69b562",
+   "bytes": 23771733,
+   "duration": 197.166667
+  }
+ ],
+ "frozen": {
+  "R6": 147.54,
+  "R7": 168.4,
+  "END": 179.0
+ },
+ "timeline_copies": [
+  "work/storyboard/baselines/reference_v3d_r3_continuous_vertical_A_blurext/timeline.md"
+ ],
+ "assets": []
+}

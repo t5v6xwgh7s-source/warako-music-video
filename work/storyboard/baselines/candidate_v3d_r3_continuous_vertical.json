@@ -1,0 +1,33 @@
+{
+ "name": "candidate_v3d_r3_continuous_vertical",
+ "created": "2026-10-04 04:29:19 UTC",
+ "note": "9:16 vertical candidate (fill rainbow cuts). Derived from candidate_v3d_r3_continuous; cut table identical to horizontal. Adopted by human 2026-10-04 after A/B.",
+ "git_commit": "d7fca20c87ab360d2b79dc23d564f27ad290f8dd",
+ "git_dirty": true,
+ "build_cmd": "python3 scripts/build_mv.py --variant v3d_r3_continuous --format vertical --vfill",
+ "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+ "python": "3.11.15",
+ "videos": [
+  {
+   "path": "output/final/candidate_v3d_r3_continuous_vertical/candidate_v3d_r3_continuous_vertical_full.mp4",
+   "sha256": "1c9916f98bbd26dca044c212efedc8659cac38c92a669f71147591a44aadc860",
+   "bytes": 58930084,
+   "duration": 197.166667
+  },
+  {
+   "path": "output/final/candidate_v3d_r3_continuous_vertical/candidate_v3d_r3_continuous_vertical_proxy.mp4",
+   "sha256": "7f27f1a59c0c333dd70199ccebf31274d9e529239b31a7a7b512200261b83dcb",
+   "bytes": 24472542,
+   "duration": 197.166667
+  }
+ ],
+ "frozen": {
+  "R6": 147.54,
+  "R7": 168.4,
+  "END": 179.0
+ },
+ "timeline_copies": [
+  "work/storyboard/baselines/candidate_v3d_r3_continuous_vertical/timeline.md"
+ ],
+ "assets": []
+}

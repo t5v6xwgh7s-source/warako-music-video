@@ -102,7 +102,7 @@ QRコード
 
 ## 版の管理(2026-10-04)
 
-- `baseline_v3b`: 最終確認の基準版(凍結)。`v3c_r3b`: 比較履歴(再カット版)。**`v3d_r3_continuous`: 現時点の採用候補**(`output/final/candidate_v3d_r3_continuous/`)。一覧は `work/storyboard/versions.md`。
+- `baseline_v3b`: 最終確認の基準版(凍結)。`v3c_r3b`: 比較履歴(再カット版)。**`v3d_r3_continuous`: 現時点の採用候補**(`output/final/candidate_v3d_r3_continuous/`)。縦版(9:16)の正式candidateは `output/final/candidate_v3d_r3_continuous_vertical/`(虹カットは既存素材のfillクロップ、記録 `work/storyboard/variants/v3d_r3_continuous_vertical/`)。一覧は `work/storyboard/versions.md`。
 - 制作の標準ワークフロー(違和感 → 局所修正 → variant → 差分検査)と汎用ツールは `music-video-maker` Skill にある。この作品の固定地点・variant登録・歌唱位置はこのリポジトリの `scripts/` と `work/storyboard/` にある。
 
 ## YouTube公開(youtube-publisher Skill)
