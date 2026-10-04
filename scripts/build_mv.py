@@ -176,7 +176,25 @@ def _v3c_r3b(rows):
     return out
 
 
-VARIANTS = {"v3c_r3b": _v3c_r3b}
+def _v3d_r3_continuous(rows):
+    """Adopted direction of v3c_r3b, without the re-cut: R3 and R3b are ONE continuous rainbow shot 0:48.00-0:53.70
+    (a single slow camera move toward the light beyond the rainbow, still moving while "虹の向こうで" (0:52.32) is sung),
+    then a soft 0.8s dissolve into p014 (memory -> "自分の足で進む"). R6 / R7 / END are not touched."""
+    out = []
+    for r in rows:
+        key, t0, t1, sec, theme, motion, cf, ct, fade, page, *extra = r
+        tag = extra[0].get("tag") if extra else None
+        if tag == "R3":
+            out.append((key, 48.00, 53.70, sec, "R3 + R3b 一本の連続した虹ショット: 虹の奥/光の方向へゆっくり進む(52.32「虹の向こうで」の間も止めない)",
+                        "zoom in", S(.42, .15, 1.40), S(.50, .18, 1.95), 0.5, "Lc", dict(tag="R3")))
+        elif key == "p014_015_first_step":
+            out.append((key, 53.70, t1, sec, "記憶の中の少女とうさぎ → 自分の足で進む(虹から柔らかく)", "pan →", S(.40, .5, 1.02), S(.60, .5, 1.02), 0.8, page))
+        else:
+            out.append(r)
+    return out
+
+
+VARIANTS = {"v3c_r3b": _v3c_r3b, "v3d_r3_continuous": _v3d_r3_continuous}
 
 
 def variant_dir():

@@ -30,6 +30,8 @@ CUES = [  # cue, row, expected tag(s), role
 
 if any(c.get("tag") == "R3b" for c in cuts):      # variant v3c_r3b: second "虹の向こうで" of the first chorus (0:52.32)
     CUES.insert(3, ("R3b", nth("虹の向こうで", 1), ("R3b",), "虹へ向かう(R3とは別の構図) → 次の p014 で一歩踏み出す"))
+elif bm.VARIANT == "v3d_r3_continuous":           # R3 and R3b are one continuous shot; 0:52.32 is checked against the same cut
+    CUES.insert(3, ("R3b", nth("虹の向こうで", 1), ("R3",), "R3と一本の連続ショットの途中(カメラは動き続ける) → 0:53.7で p014 へ柔らかくディゾルブ"))
 
 def cut_at(t):
     return next((c for c in cuts if c["t0"] <= t < c["t1"]), cuts[-1])
